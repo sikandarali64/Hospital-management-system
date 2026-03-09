@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob purple-blob"></div>
+        <div class="blob blue-blob"></div>
+    </div>
+
+    <nav class="glass-nav">
+        <div class="logo">
+            <span class="logo-icon">🫀</span> HMS <span>Pro</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#about">About</a>
+        </div>
+        <button class="btn-primary" onclick="window.location.href='dashboard.html'">Login Provider</button>
+    </nav>
+
+    <main class="hero-section">
+        <div class="hero-content">
+            <div class="badge">✨ Next-Generation Healthcare</div>
+            <h1>Smart <span>Hospital Management</span> At Your Fingertips</h1>
+            <p>Experience a seamless, fast, and secure way to manage appointments, patients, and hospital staff with our cutting-edge web platform.</p>
+            
+            <div class="hero-buttons">
+                <button class="btn-primary large" onclick="window.location.href='dashboard.html'">Go to Dashboard</button>
+                <button class="btn-secondary large">View Features</button>
+            </div>
+            
+            <div class="stats-row">
+                <div class="stat"><span class="stat-num">24/7</span><span class="stat-text">Availability</span></div>
+                <div class="stat"><span class="stat-num">99.9%</span><span class="stat-text">Uptime</span></div>
+                <div class="stat"><span class="stat-num">10k+</span><span class="stat-text">Patients</span></div>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="glass-card main-card">
+                <div class="card-header">
+                    <h3>Today's Overview</h3>
+                    <span class="status online">Live</span>
+                </div>
+                <div class="dashboard-mock">
+                    <div class="mock-item">
+                        <div class="icon-box pulse">📅</div>
+                        <div class="mock-text">
+                            <h4>42 Appointments</h4>
+                            <p>Next: Dr. Smith in 10 mins</p>
+                        </div>
+                    </div>
+                    <div class="mock-item">
+                        <div class="icon-box blue">🩺</div>
+                        <div class="mock-text">
+                            <h4>18 Staff Active</h4>
+                            <p>3 Departments busy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>

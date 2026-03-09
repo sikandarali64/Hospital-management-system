@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMS - Register Patient</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 20px;
+            padding: 2.5rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 1rem;
+            border-radius: 10px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group select option {
+            background: var(--bg-dark);
+            color: var(--text-main);
+        }
+
+        /* Update buttons standard width */
+        .btn-submit {
+            width: 100%;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <div class="background-elements">
+        <div class="blob purple-blob" style="width: 400px; height: 400px; top: -10%; left: -5%;"></div>
+        <div class="blob blue-blob" style="width: 500px; height: 500px; bottom: -20%; right: -10%;"></div>
+    </div>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation (Same as Dashboard) -->
+        <aside class="sidebar glass-panel">
+            <div class="logo sidebar-logo">
+                <span class="logo-icon">🫀</span> HMS <span>Pro</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <p class="nav-label">Main Menu</p>
+                    <a href="dashboard.html" class="nav-item">
+                        <span class="icon">📊</span>
+                        <span>Overview</span>
+                    </a>
+                    <a href="register.html" class="nav-item active">
+                        <span class="icon">📝</span>
+                        <span>Register Patient</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <span class="icon">🩺</span>
+                        <span>Doctors</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <span class="icon">📅</span>
+                        <span>Appointments</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-content">
+            <header class="dashboard-header glass-panel">
+                <div class="header-profile" style="margin-left: auto;">
+                    <div class="admin-profile">
+                        <div class="avatar">AD</div>
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="form-container glass-panel">
+                <div class="panel-header" style="margin-bottom: 2rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 1.5rem;">
+                    <h2>Register New Patient</h2>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Enter details to admit a new patient into the system.</p>
+                </div>
+
+                <form id="patientRegistrationForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required placeholder="Ex. John">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required placeholder="Ex. Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">Date of Birth</label>
+                            <input type="date" id="dob" name="dob" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender" required>
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="(123) 456-7890">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="address">Address</label>
+                            <textarea id="address" name="address" rows="3" required placeholder="Full street address"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="department">Assign Department</label>
+                            <select id="department" name="department" required>
+                                <option value="" disabled selected>Select Department</option>
+                                <option value="cardiology">Cardiology</option>
+                                <option value="neurology">Neurology</option>
+                                <option value="pediatrics">Pediatrics</option>
+                                <option value="orthopedics">Orthopedics</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="doctor">Assign Doctor</label>
+                            <select id="doctor" name="doctor" required>
+                                <option value="" disabled selected>Select Doctor</option>
+                                <option value="1">Dr. Sarah Smith</option>
+                                <option value="2">Dr. Michael Chen</option>
+                                <option value="3">Dr. Emily Davis</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary large btn-submit">Register Patient</button>
+                </form>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.getElementById('patientRegistrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            
+            // Mock submission
+            btn.innerText = "Processing...";
+            btn.style.opacity = "0.7";
+            
+            setTimeout(() => {
+                alert("SUCCESS: Patient registered successfully!");
+                btn.innerText = "Registered ✔️";
+                btn.style.background = "#10b981";
+                e.target.reset();
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "";
+                    btn.style.opacity = "1";
+                }, 2000);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
