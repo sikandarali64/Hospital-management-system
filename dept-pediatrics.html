@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pediatrics Department - HMS Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-header { padding: 4rem 5% 2rem 5%; text-align: center; }
+        .page-header h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .page-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+        .dept-hero { max-width: 900px; margin: 0 auto 2rem auto; padding: 0 5%; display: flex; gap: 2rem; align-items: center; }
+        .dept-hero-icon { font-size: 8rem; flex-shrink: 0; animation: bounce 1.5s infinite; }
+        @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+        .dept-hero-text h2 { font-size: 1.8rem; margin-bottom: 0.8rem; }
+        .dept-hero-text p { color: var(--text-muted); line-height: 1.8; }
+        .services-grid { max-width: 900px; margin: 2rem auto 5rem auto; padding: 0 5%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .service-item { background: rgba(20,22,33,0.6); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 14px; padding: 1.5rem; text-align: center; transition: transform 0.3s; }
+        .service-item:hover { transform: translateY(-5px); }
+        .service-item .icon { font-size: 2rem; margin-bottom: 0.8rem; }
+        .service-item h4 { font-size: 0.95rem; }
+        .cta-wrap { text-align: center; margin-bottom: 4rem; }
+        @media (max-width: 650px) { .services-grid { grid-template-columns: 1fr 1fr; } .dept-hero { flex-direction: column; text-align: center; } }
+    </style>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob purple-blob"></div>
+        <div class="blob blue-blob"></div>
+    </div>
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <span><span style="color:#ef4444;">🚨</span> Emergency: 111-911-911</span>
+                <span class="hide-mobile">|</span>
+                <span class="hide-mobile">📍 Find a Location</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="patient-portal.html">Patient Portal Login</a>
+                <a href="dashboard.html" class="staff-login">Staff/Admin Login</a>
+            </div>
+        </div>
+    </div>
+    <nav class="glass-nav">
+        <div class="logo"><span class="logo-icon">🏥</span> HMS <span>Pro</span></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <div class="dropdown">
+                <a href="#about" class="dropbtn">About Us ▾</a>
+                <div class="dropdown-content">
+                    <a href="vision-mission.html">Vision & Mission</a>
+                    <a href="leadership.html">Leadership</a>
+                    <a href="accreditations.html">Accreditations</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#services" class="dropbtn">Patient Services ▾</a>
+                <div class="dropdown-content">
+                    <a href="find-doctor.html">Find a Doctor</a>
+                    <a href="request-appointment.html">Book Appointment</a>
+                    <a href="admission-guidelines.html">Admission Guidelines</a>
+                    <a href="welfare-support.html">Welfare & Support</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#departments" class="dropbtn active">Departments ▾</a>
+                <div class="dropdown-content">
+                    <a href="dept-cardiology.html">Cardiology</a>
+                    <a href="dept-neurology.html">Neurology</a>
+                    <a href="dept-pediatrics.html" class="active">Pediatrics</a>
+                    <a href="dept-orthopedics.html">Orthopedics</a>
+                </div>
+            </div>
+            <a href="clinical-labs.html">Clinical Labs</a>
+        </div>
+        <button class="btn-primary" onclick="window.location.href='request-appointment.html'">Book Appointment</button>
+    </nav>
+
+    <div class="page-header">
+        <h1>Pediatrics Department</h1>
+        <p>Specialized, compassionate healthcare for infants, children, and adolescents from birth through 18 years.</p>
+    </div>
+
+    <div class="dept-hero">
+        <div class="dept-hero-icon">👶</div>
+        <div class="dept-hero-text">
+            <h2>Caring for Your Little Ones</h2>
+            <p>Our Pediatrics Department is dedicated to providing child-friendly, family-centered care. Our board-certified pediatricians and pediatric nurses are specially trained to meet the unique physical and emotional needs of children at every stage of development, from newborns to teenagers.</p>
+        </div>
+    </div>
+
+    <div class="services-grid">
+        <div class="service-item"><div class="icon">💉</div><h4>Vaccinations & Immunization</h4></div>
+        <div class="service-item"><div class="icon">🩺</div><h4>Well-Child Checkups</h4></div>
+        <div class="service-item"><div class="icon">🏥</div><h4>Neonatal Intensive Care (NICU)</h4></div>
+        <div class="service-item"><div class="icon">😴</div><h4>Pediatric Sleep Clinic</h4></div>
+        <div class="service-item"><div class="icon">🧪</div><h4>Pediatric Lab Services</h4></div>
+        <div class="service-item"><div class="icon">🧠</div><h4>Developmental Assessment</h4></div>
+    </div>
+
+    <div class="cta-wrap">
+        <button class="btn-primary large" onclick="window.location.href='request-appointment.html'">Book a Pediatrics Appointment</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</body>
+</html>

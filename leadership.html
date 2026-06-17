@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership - HMS Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-header {
+            padding: 4rem 5% 2rem 5%;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .page-header p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .leadership-grid {
+            max-width: 1100px;
+            margin: 0 auto 5rem auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .leader-card {
+            background: rgba(20, 22, 33, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .leader-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .leader-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 1.5rem auto;
+            background: linear-gradient(135deg, rgba(99,102,241,0.3), rgba(168,85,247,0.3));
+            border: 2px solid rgba(99,102,241,0.4);
+        }
+
+        .leader-card h3 {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-bottom: 0.3rem;
+        }
+
+        .leader-card .title {
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .leader-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        @media (max-width: 768px) {
+            .leadership-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .leadership-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob purple-blob"></div>
+        <div class="blob blue-blob"></div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <span><span style="color: #ef4444;">🚨</span> Emergency: 111-911-911</span>
+                <span class="hide-mobile">|</span>
+                <span class="hide-mobile">📍 Find a Location</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="#">Patient Portal Login</a>
+                <a href="dashboard.html" class="staff-login">Staff/Admin Login</a>
+            </div>
+        </div>
+    </div>
+
+    <nav class="glass-nav">
+        <div class="logo">
+            <span class="logo-icon">🏥</span> HMS <span>Pro</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+
+            <div class="dropdown">
+                <a href="#about" class="dropbtn active">About Us ▾</a>
+                <div class="dropdown-content">
+                    <a href="vision-mission.html">Vision & Mission</a>
+                    <a href="leadership.html" class="active">Leadership</a>
+                    <a href="accreditations.html">Accreditations</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#services" class="dropbtn">Patient Services ▾</a>
+                <div class="dropdown-content">
+                    <a href="find-doctor.html">Find a Doctor</a>
+                    <a href="request-appointment.html">Book Appointment</a>
+                    <a href="admission-guidelines.html">Admission Guidelines</a>
+                    <a href="welfare-support.html">Welfare & Support</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#departments" class="dropbtn">Departments ▾</a>
+                <div class="dropdown-content">
+                    <a href="dept-cardiology.html">Cardiology</a>
+                    <a href="dept-neurology.html">Neurology</a>
+                    <a href="dept-pediatrics.html">Pediatrics</a>
+                    <a href="dept-orthopedics.html">Orthopedics</a>
+                </div>
+            </div>
+
+            <a href="clinical-labs.html">Clinical Labs</a>
+        </div>
+        <button class="btn-primary" onclick="window.location.href='request-appointment.html'">Book Appointment</button>
+    </nav>
+
+    <div class="page-header">
+        <h1>Our Leadership</h1>
+        <p>Meet the dedicated professionals who guide HMS Pro's mission of excellence in healthcare.</p>
+    </div>
+
+    <div class="leadership-grid">
+        <div class="leader-card">
+            <div class="leader-avatar">👨‍⚕️</div>
+            <h3>Dr. Ahmad Karimi</h3>
+            <div class="title">Chief Executive Officer</div>
+            <p>With over 25 years of experience in healthcare administration, Dr. Karimi leads HMS Pro's strategic vision and operational excellence.</p>
+        </div>
+        <div class="leader-card">
+            <div class="leader-avatar">👩‍⚕️</div>
+            <h3>Dr. Sara Malik</h3>
+            <div class="title">Chief Medical Officer</div>
+            <p>A board-certified physician, Dr. Malik oversees all clinical operations and ensures the highest standards of patient care across all departments.</p>
+        </div>
+        <div class="leader-card">
+            <div class="leader-avatar">🧑‍💼</div>
+            <h3>Mr. Bilal Hassan</h3>
+            <div class="title">Chief Operating Officer</div>
+            <p>Mr. Hassan manages hospital operations, ensuring seamless healthcare delivery through process innovation and team leadership.</p>
+        </div>
+        <div class="leader-card">
+            <div class="leader-avatar">👩‍🔬</div>
+            <h3>Dr. Nadia Shah</h3>
+            <div class="title">Head of Cardiology</div>
+            <p>Dr. Shah is a globally recognized cardiologist specializing in minimally invasive heart procedures and cardiovascular research.</p>
+        </div>
+        <div class="leader-card">
+            <div class="leader-avatar">🧑‍⚕️</div>
+            <h3>Dr. Omar Farooq</h3>
+            <div class="title">Head of Neurology</div>
+            <p>Dr. Farooq leads the neurology department with a focus on stroke care, epilepsy treatment, and cutting-edge neurological research.</p>
+        </div>
+        <div class="leader-card">
+            <div class="leader-avatar">👩‍💼</div>
+            <h3>Ms. Hina Iqbal</h3>
+            <div class="title">Chief Nursing Officer</div>
+            <p>Ms. Iqbal champions compassionate patient care, leading a team of over 500 dedicated nursing professionals across our facilities.</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</body>
+</html>

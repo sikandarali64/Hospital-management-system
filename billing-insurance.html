@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing & Insurance - HMS Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-header { padding: 4rem 5% 2rem 5%; text-align: center; }
+        .page-header h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .page-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6; font-size: 1.1rem; }
+        
+        .content-container { max-width: 900px; margin: 0 auto 4rem auto; padding: 0 5%; }
+        .card { background: rgba(20, 22, 33, 0.6); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; }
+        .card h2 { font-size: 1.5rem; margin-bottom: 1rem; color: #efeff1; }
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted); }
+        .form-control { width: 100%; padding: 0.8rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; font-family: 'Outfit'; }
+        .btn-submit { background: var(--accent-primary, #6366f1); color: #fff;  padding: 0.9rem 2rem; border-radius: 12px; border: none; font-size: 1rem; cursor: pointer; transition: 0.3s; font-weight: 600; width: 100%; }
+        .btn-submit:hover { background: #4f46e5; }
+        .insurance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+        .insurance-item { padding: 1.5rem; text-align: center; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); font-weight: 600; }
+        
+    </style>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob purple-blob"></div>
+        <div class="blob blue-blob"></div>
+    </div>
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <span><span style="color:#ef4444;">🚨</span> Emergency: 111-911-911</span>
+                <span class="hide-mobile">|</span>
+                <span class="hide-mobile">📍 Find a Location</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="#">Patient Portal Login</a>
+                <a href="dashboard.html" class="staff-login">Staff/Admin Login</a>
+            </div>
+        </div>
+    </div>
+    <nav class="glass-nav">
+        <div class="logo"><span class="logo-icon">🏥</span> HMS <span>Pro</span></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <div class="dropdown">
+                <a href="#about" class="dropbtn">About Us ▾</a>
+                <div class="dropdown-content">
+                    <a href="vision-mission.html">Vision & Mission</a>
+                    <a href="leadership.html">Leadership</a>
+                    <a href="accreditations.html">Accreditations</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#services" class="dropbtn active">Patient Services ▾</a>
+                <div class="dropdown-content">
+                    <a href="find-doctor.html">Find a Doctor</a>
+                    <a href="request-appointment.html">Book Appointment</a>
+                    <a href="admission-guidelines.html">Admission Guidelines</a>
+                    <a href="welfare-support.html">Welfare & Support</a>
+                    <a href="billing-insurance.html">Billing & Insurance</a>
+                    <a href="international-services.html">International Services</a>
+                    <a href="patient-visitor-guide.html">Patient & Visitor Guide</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#departments" class="dropbtn">Departments ▾</a>
+                <div class="dropdown-content">
+                    <a href="dept-cardiology.html">Cardiology</a>
+                    <a href="dept-neurology.html">Neurology</a>
+                    <a href="dept-pediatrics.html">Pediatrics</a>
+                    <a href="dept-orthopedics.html">Orthopedics</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#health" class="dropbtn">Health Library ▾</a>
+                <div class="dropdown-content">
+                    <a href="diseases-conditions.html">Diseases & Conditions</a>
+                    <a href="#">Symptoms Checker</a>
+                    <a href="#">Tests & Procedures</a>
+                    <a href="#">Drugs & Supplements</a>
+                </div>
+            </div>
+            <a href="clinical-labs.html">Clinical Labs</a>
+        </div>
+        <button class="btn-primary" onclick="window.location.href='request-appointment.html'">Book Appointment</button>
+    </nav>
+
+    <div class="page-header">
+        <h1>Billing & Insurance</h1>
+        <p>Easy and transparent billing. Verify your insurance or make secure online payments.</p>
+    </div>
+
+    
+        <div class="content-container">
+            <div class="card">
+                <h2>Accepted Insurance Providers</h2>
+                <p style="color: var(--text-muted)">HMS Pro accepts most major national and international healthcare plans.</p>
+                <div class="insurance-grid">
+                    <div class="insurance-item">State Life Insurance</div>
+                    <div class="insurance-item">Jubilee Life</div>
+                    <div class="insurance-item">Allianz Care</div>
+                    <div class="insurance-item">Bupa Global</div>
+                    <div class="insurance-item">Cigna Healthcare</div>
+                    <div class="insurance-item">Aetna International</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Verify Your Insurance</h2>
+                <form onsubmit="submitInsurance(event)">
+                    <div class="form-group">
+                        <label>Patient Full Name</label>
+                        <input type="text" id="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Policy Number</label>
+                        <input type="text" id="policy" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Insurance Provider</label>
+                        <select id="provider" class="form-control" required>
+                            <option value="">Select a Provider</option>
+                            <option value="State Life">State Life</option>
+                            <option value="Jubilee Life">Jubilee Life</option>
+                            <option value="Allianz">Allianz</option>
+                            <option value="Bupa">Bupa</option>
+                            <option value="Cigna">Cigna</option>
+                            <option value="Other">Other (We will contact you)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit">Verify Insurance</button>
+                </form>
+            </div>
+        </div>
+        
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+    
+        <script>
+            async function submitInsurance(e) {
+                e.preventDefault();
+                const btn = e.target.querySelector('button');
+                btn.innerHTML = 'Submitting...';
+                
+                const data = {
+                    patient_name: document.getElementById('name').value,
+                    policy_number: document.getElementById('policy').value,
+                    provider: document.getElementById('provider').value
+                };
+                
+                try {
+                    await insertInsuranceRequest(data);
+                    showToast('Insurance verification request submitted successfully!');
+                    e.target.reset();
+                } catch (err) {
+                    showToast('Failed to submit: ' + err.message, 'error');
+                } finally {
+                    btn.innerHTML = 'Verify Insurance';
+                }
+            }
+        </script>
+        
+</body>
+</html>

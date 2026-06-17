@@ -3,72 +3,1488 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital Management System</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>HMS Pro – The World-Class Hospital Management System</title>
+    <meta name="description" content="HMS Pro offers compassionate, world-class healthcare. Find doctors, book appointments, explore departments, and access our health library.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== RESET & ROOT ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --navy:      #003366;
+            --navy-deep: #001f44;
+            --blue:      #0057b8;
+            --blue-light:#1a78d4;
+            --teal:      #00857c;
+            --teal-light:#00a99d;
+            --red:       #cc0000;
+            --white:     #ffffff;
+            --off-white: #f5f7fa;
+            --gray-100:  #f0f2f5;
+            --gray-200:  #e2e8f0;
+            --gray-400:  #94a3b8;
+            --gray-600:  #475569;
+            --gray-800:  #1e293b;
+            --text:      #1a1a2e;
+            --text-muted:#64748b;
+            --accent:    #00857c;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+            --shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
+            --radius:    8px;
+            --radius-lg: 16px;
+        }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        body { font-family: 'Outfit', sans-serif; color: var(--text); background: var(--white); line-height: 1.6; }
+        a { color: var(--blue); text-decoration: none; transition: color .2s; }
+        a:hover { color: var(--blue-light); }
+        img { max-width: 100%; display: block; }
+        ul { list-style: none; }
+
+        /* ===== TOP UTILITY BAR ===== */
+        .top-bar {
+            background: var(--navy-deep);
+            padding: 0.55rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .top-bar-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.75);
+        }
+        .top-bar-left { display: flex; gap: 1.5rem; align-items: center; }
+        .top-bar-left span { display: flex; align-items: center; gap: 0.4rem; }
+        .top-bar-left .emergency { color: #ff6b6b; font-weight: 600; }
+        .top-bar-right { display: flex; gap: 1rem; }
+        .top-bar-right a { color: rgba(255,255,255,0.75); font-size: 0.8rem; transition: color .2s; }
+        .top-bar-right a:hover { color: #fff; }
+        .top-bar-right .btn-staff {
+            background: var(--teal);
+            color: #fff;
+            padding: 0.3rem 0.9rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+        .top-bar-right .btn-staff:hover { background: var(--teal-light); }
+
+        /* ===== MAIN NAV ===== */
+        .main-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+        }
+        .nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            height: 64px;
+        }
+        .logo {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-right: 2.5rem;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo span.plus { color: var(--teal); }
+        .logo .logo-icon { font-size: 1.6rem; }
+        .nav-links-main {
+            display: flex;
+            align-items: stretch;
+            flex: 1;
+            height: 100%;
+        }
+        .nav-item-wrap {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .nav-item-wrap > a {
+            color: var(--gray-800);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 0 1rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            border-bottom: 3px solid transparent;
+            transition: color .2s, border-color .2s;
+            white-space: nowrap;
+        }
+        .nav-item-wrap:hover > a,
+        .nav-item-wrap > a.active {
+            color: var(--navy);
+            border-bottom-color: var(--teal);
+        }
+        .nav-item-wrap > a svg { width: 12px; height: 12px; fill: currentColor; }
+
+        /* Megamenu */
+        .mega-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 260px;
+            background: var(--white);
+            border-top: 3px solid var(--teal);
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 1.5rem;
+            z-index: 999;
+        }
+        .nav-item-wrap:hover .mega-menu { display: block; }
+        .mega-menu h4 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray-400);
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+        .mega-menu a {
+            display: block;
+            color: var(--gray-600);
+            font-size: 0.88rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .mega-menu a:last-child { border-bottom: none; }
+        .mega-menu a:hover { color: var(--blue); padding-left: 4px; }
+
+        .nav-actions { display: flex; gap: 0.75rem; align-items: center; margin-left: auto; }
+        .btn-nav-primary {
+            background: var(--teal);
+            color: #fff;
+            padding: 0.55rem 1.25rem;
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: background .2s, transform .1s;
+        }
+        .btn-nav-primary:hover { background: var(--teal-light); color: #fff; transform: translateY(-1px); }
+        .btn-nav-secondary {
+            border: 2px solid var(--navy);
+            color: var(--navy);
+            padding: 0.5rem 1.1rem;
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all .2s;
+        }
+        .btn-nav-secondary:hover { background: var(--navy); color: #fff; }
+
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, var(--navy-deep) 0%, #00418a 60%, var(--teal) 100%);
+            color: #fff;
+            padding: 5rem 0 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='1.5' fill='rgba(255,255,255,0.05)'/%3E%3C/svg%3E");
+        }
+        .hero-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            position: relative;
+        }
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(8px);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: rgba(255,255,255,0.9);
+        }
+        .hero h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.25rem;
+        }
+        .hero h1 em { font-style: normal; color: #7ae7df; }
+        .hero p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.85);
+            max-width: 500px;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn-hero-primary {
+            background: var(--teal);
+            color: #fff;
+            padding: 0.9rem 2rem;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all .25s;
+            box-shadow: 0 4px 20px rgba(0,133,124,0.4);
+        }
+        .btn-hero-primary:hover { background: var(--teal-light); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,133,124,0.5); }
+        .btn-hero-secondary {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            padding: 0.9rem 2rem;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: all .25s;
+        }
+        .btn-hero-secondary:hover { background: rgba(255,255,255,0.2); color: #fff; }
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+        .hero-stat {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: var(--radius);
+            padding: 1rem;
+            text-align: center;
+        }
+        .hero-stat strong { display: block; font-size: 1.9rem; font-weight: 800; color: #7ae7df; }
+        .hero-stat span { font-size: 0.78rem; color: rgba(255,255,255,0.7); }
+
+        /* Hero visual panel */
+        .hero-right { display: flex; flex-direction: column; gap: 1rem; }
+        .quick-card {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all .25s;
+        }
+        .quick-card:hover { background: rgba(255,255,255,0.18); transform: translateX(6px); }
+        .quick-card .card-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .quick-card .card-icon.teal  { background: rgba(0,133,124,0.4); }
+        .quick-card .card-icon.blue  { background: rgba(0,87,184,0.4);  }
+        .quick-card .card-icon.amber { background: rgba(245,158,11,0.3);}
+        .quick-card .card-icon.purple{ background: rgba(139,92,246,0.3);}
+        .quick-card h4 { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 0.15rem; }
+        .quick-card p { font-size: 0.78rem; color: rgba(255,255,255,0.65); margin: 0; }
+        .quick-card .arrow { margin-left: auto; color: rgba(255,255,255,0.5); font-size: 1.2rem; }
+
+        /* ===== SEARCH BAR ===== */
+        .search-section {
+            background: var(--white);
+            padding: 2.5rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .search-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+        .search-inner h2 { font-family: 'Merriweather', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 0.5rem; }
+        .search-inner p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            border: 2px solid var(--navy);
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            max-width: 680px;
+            margin: 0 auto 1.5rem;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text);
+        }
+        .search-bar button {
+            background: var(--navy);
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .search-bar button:hover { background: var(--blue); }
+        .search-tabs { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
+        .search-tab {
+            padding: 0.4rem 1.1rem;
+            border-radius: 100px;
+            font-size: 0.83rem;
+            font-weight: 600;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all .2s;
+        }
+        .search-tab.active, .search-tab:hover { background: var(--teal); color: #fff; border-color: var(--teal); }
+
+        /* ===== SECTION UTILITIES ===== */
+        .section { padding: 4.5rem 0; }
+        .section-alt { background: var(--off-white); }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+        .section-header { margin-bottom: 2.5rem; }
+        .section-header h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 2rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+        .section-header p { color: var(--text-muted); font-size: 1rem; max-width: 600px; }
+        .section-header-row { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .view-all-link { color: var(--blue); font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 0.3rem; white-space: nowrap; }
+        .view-all-link:hover { color: var(--teal); }
+        .tag {
+            display: inline-block;
+            background: rgba(0,133,124,0.1);
+            color: var(--teal);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            margin-bottom: 0.75rem;
+        }
+
+        /* ===== A-Z FINDER ===== */
+        .az-section { background: var(--navy-deep); padding: 3rem 0; }
+        .az-inner { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+        .az-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+        .az-header h2 { font-family: 'Merriweather', serif; font-size: 1.5rem; color: #fff; }
+        .az-header p { color: rgba(255,255,255,0.6); font-size: 0.88rem; margin-top: 0.25rem; }
+        .az-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+        .az-letter {
+            width: 44px; height: 44px;
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.85);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all .2s;
+        }
+        .az-letter:hover { background: var(--teal); border-color: var(--teal); color: #fff; transform: translateY(-2px); }
+
+        /* ===== STATS BAND ===== */
+        .stats-band { background: var(--teal); padding: 2.5rem 0; }
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.2); }
+        .stat-item {
+            background: var(--teal);
+            padding: 2rem;
+            text-align: center;
+        }
+        .stat-item strong { display: block; font-size: 2.5rem; font-weight: 800; color: #fff; line-height: 1; }
+        .stat-item span { font-size: 0.85rem; color: rgba(255,255,255,0.8); font-weight: 500; margin-top: 0.4rem; display: block; }
+
+        /* ===== DEPARTMENT CARDS ===== */
+        .dept-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+        .dept-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: transform .3s, box-shadow .3s;
+            cursor: pointer;
+        }
+        .dept-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+        .dept-card-top {
+            height: 120px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem;
+        }
+        .dept-card-top.c1 { background: linear-gradient(135deg, #e8f4f8, #c8e6f0); }
+        .dept-card-top.c2 { background: linear-gradient(135deg, #f0e8f8, #dcc8f0); }
+        .dept-card-top.c3 { background: linear-gradient(135deg, #e8f8f0, #c8f0dc); }
+        .dept-card-top.c4 { background: linear-gradient(135deg, #f8f0e8, #f0d8c8); }
+        .dept-card-top.c5 { background: linear-gradient(135deg, #f8e8e8, #f0c8c8); }
+        .dept-card-top.c6 { background: linear-gradient(135deg, #e8eff8, #c8d8f0); }
+        .dept-card-top.c7 { background: linear-gradient(135deg, #f8f8e8, #f0f0c8); }
+        .dept-card-top.c8 { background: linear-gradient(135deg, #e8f8f8, #c8f0f0); }
+        .dept-card-body { padding: 1.25rem; }
+        .dept-card-body h3 { font-size: 1rem; color: var(--navy); font-weight: 700; margin-bottom: 0.4rem; }
+        .dept-card-body p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.75rem; }
+        .dept-card-body a { font-size: 0.82rem; font-weight: 700; color: var(--blue); }
+
+        /* ===== DOCTOR CARDS ===== */
+        .doctor-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+        .doctor-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: transform .3s, box-shadow .3s;
+        }
+        .doctor-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .doctor-avatar {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem;
+        }
+        .doctor-card h3 { font-size: 1rem; color: var(--navy); font-weight: 700; margin-bottom: .3rem; }
+        .doctor-card .specialty { font-size: 0.82rem; color: var(--teal); font-weight: 600; margin-bottom: 0.5rem; }
+        .doctor-card .rating { font-size: 0.8rem; color: var(--gray-400); margin-bottom: 1rem; }
+        .doctor-card .rating strong { color: #f59e0b; }
+        .btn-sm-outline {
+            border: 2px solid var(--navy);
+            color: var(--navy);
+            padding: 0.45rem 1.1rem;
+            border-radius: var(--radius);
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: inline-block;
+            transition: all .2s;
+        }
+        .btn-sm-outline:hover { background: var(--navy); color: #fff; }
+
+        /* ===== HEALTH LIBRARY ===== */
+        .health-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .health-card {
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: var(--white);
+            transition: box-shadow .3s;
+        }
+        .health-card:hover { box-shadow: var(--shadow-md); }
+        .health-card-img {
+            height: 140px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3.5rem;
+        }
+        .health-card-img.h1 { background: linear-gradient(135deg,#e8f4fe,#b3d4f5); }
+        .health-card-img.h2 { background: linear-gradient(135deg,#e8fef4,#b3f5d4); }
+        .health-card-img.h3 { background: linear-gradient(135deg,#fef8e8,#f5e4b3); }
+        .health-card-img.h4 { background: linear-gradient(135deg,#fde8f0,#f5b3c8); }
+        .health-card-img.h5 { background: linear-gradient(135deg,#f0e8fe,#d4b3f5); }
+        .health-card-img.h6 { background: linear-gradient(135deg,#e8fefe,#b3f0f5); }
+        .health-card-body { padding: 1.25rem; }
+        .health-card-body .cat { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--teal); margin-bottom: 0.5rem; }
+        .health-card-body h3 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; line-height: 1.4; }
+        .health-card-body p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.75rem; }
+        .health-card-body a { font-size: 0.82rem; font-weight: 700; color: var(--blue); }
+
+        /* ===== HEALING CTA ===== */
+        .healing-section {
+            background: linear-gradient(135deg, var(--navy-deep) 0%, #004080 100%);
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .healing-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            background: rgba(0,133,124,0.12);
+        }
+        .healing-inner { max-width: 1280px; margin: 0 auto; padding: 0 2rem; position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .healing-content h2 { font-family: 'Merriweather', serif; font-size: 2.2rem; color: #fff; margin-bottom: 1rem; line-height: 1.3; }
+        .healing-content p { color: rgba(255,255,255,0.8); font-size: 1rem; line-height: 1.7; margin-bottom: 2rem; }
+        .healing-features { display: flex; flex-direction: column; gap: 1rem; }
+        .healing-feature { display: flex; gap: 1rem; align-items: flex-start; }
+        .healing-feature .feat-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+        .healing-feature h4 { color: #fff; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+        .healing-feature p { color: rgba(255,255,255,0.65); font-size: 0.85rem; margin: 0; }
+        .healing-card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+        }
+        .healing-card h3 { color: #fff; font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .healing-item { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .healing-item:last-of-type { border-bottom: none; margin-bottom: 1.5rem; }
+        .healing-item-left { display: flex; align-items: center; gap: 0.75rem; }
+        .healing-item-left .ava { width: 36px; height: 36px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .healing-item-left span { color: rgba(255,255,255,0.85); font-size: 0.88rem; }
+        .healing-item-right { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+
+        /* ===== LOCATIONS ===== */
+        .loc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .loc-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: transform .3s, box-shadow .3s;
+        }
+        .loc-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .loc-map {
+            height: 120px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem;
+        }
+        .loc-map.l1 { background: linear-gradient(135deg,#fff7e8,#fde8b3); }
+        .loc-map.l2 { background: linear-gradient(135deg,#e8f8e8,#b3f5b3); }
+        .loc-map.l3 { background: linear-gradient(135deg,#e8effe,#b3c8f5); }
+        .loc-body { padding: 1.25rem; }
+        .loc-body h3 { font-size: 1rem; color: var(--navy); font-weight: 700; margin-bottom: 0.3rem; }
+        .loc-body p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+        .loc-meta { display: flex; gap: 1rem; margin-bottom: 0.75rem; }
+        .loc-meta span { font-size: 0.78rem; color: var(--gray-600); display: flex; align-items: center; gap: 0.3rem; }
+        .loc-body a { font-size: 0.82rem; font-weight: 700; color: var(--blue); }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .testimonial-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+        }
+        .testimonial-card .stars { color: #f59e0b; font-size: 1rem; margin-bottom: 1rem; }
+        .testimonial-card p { font-size: 0.9rem; color: var(--gray-600); line-height: 1.7; margin-bottom: 1.5rem; font-style: italic; }
+        .testimonial-author { display: flex; align-items: center; gap: 0.75rem; }
+        .testimonial-author .ava { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), var(--blue)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 0.9rem; }
+        .testimonial-author strong { font-size: 0.9rem; color: var(--navy); display: block; }
+        .testimonial-author span { font-size: 0.78rem; color: var(--text-muted); }
+
+        /* ===== NEWS ===== */
+        .news-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1.5rem; }
+        .news-card { border: 1px solid var(--gray-200); border-radius: var(--radius-lg); overflow: hidden; background: var(--white); transition: box-shadow .3s; }
+        .news-card:hover { box-shadow: var(--shadow-md); }
+        .news-img { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+        .news-img.n1 { background: linear-gradient(135deg,#e8f4fe,#c0dbf5); }
+        .news-img.n2 { background: linear-gradient(135deg,#e8fef4,#c0f5db); }
+        .news-img.n3 { background: linear-gradient(135deg,#fef0e8,#f5d4c0); }
+        .news-card.featured .news-img { height: 240px; }
+        .news-body { padding: 1.25rem; }
+        .news-body .cat { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--teal); margin-bottom: 0.4rem; }
+        .news-body h3 { font-size: 1rem; color: var(--navy); font-weight: 700; line-height: 1.4; margin-bottom: 0.4rem; }
+        .news-card.featured .news-body h3 { font-size: 1.2rem; }
+        .news-body p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.6rem; }
+        .news-body .date { font-size: 0.75rem; color: var(--gray-400); }
+
+        /* ===== DONATE BAND ===== */
+        .donate-band {
+            background: linear-gradient(90deg, var(--red) 0%, #990000 100%);
+            padding: 3rem 0;
+        }
+        .donate-inner { max-width: 1280px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+        .donate-inner h2 { font-family: 'Merriweather', serif; font-size: 1.75rem; color: #fff; }
+        .donate-inner p { color: rgba(255,255,255,0.85); font-size: 0.95rem; margin-top: 0.4rem; }
+        .btn-donate {
+            background: #fff;
+            color: var(--red);
+            padding: 0.9rem 2.5rem;
+            border-radius: var(--radius);
+            font-weight: 800;
+            font-size: 1rem;
+            transition: all .25s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .btn-donate:hover { background: var(--off-white); color: var(--red); transform: scale(1.03); }
+
+        /* ===== FOOTER ===== */
+        .footer { background: var(--navy-deep); padding: 4rem 0 0; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .footer-brand .footer-logo { font-family: 'Merriweather', serif; font-size: 1.5rem; color: #fff; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+        .footer-brand p { font-size: 0.85rem; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 1.5rem; max-width: 280px; }
+        .footer-social { display: flex; gap: 0.75rem; }
+        .footer-social a { width: 36px; height: 36px; border-radius: var(--radius); background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; transition: all .2s; }
+        .footer-social a:hover { background: var(--teal); color: #fff; }
+        .footer-col h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); font-weight: 700; margin-bottom: 1rem; }
+        .footer-col ul li a { display: block; color: rgba(255,255,255,0.65); font-size: 0.85rem; padding: 0.3rem 0; transition: color .2s; }
+        .footer-col ul li a:hover { color: #fff; }
+        .footer-bottom { padding: 1.5rem 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.35); }
+        .footer-bottom-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        .footer-bottom-links a { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+        .footer-bottom-links a:hover { color: rgba(255,255,255,0.8); }
+
+        /* ===== MOBILE NAV TOGGLE ===== */
+        .hamburger { display: none; }
+        @media (max-width: 1024px) {
+            .dept-grid { grid-template-columns: repeat(2, 1fr); }
+            .doctor-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-inner { grid-template-columns: 1fr; }
+            .hero-right { display: none; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links-main { display: none; }
+            .hamburger { display: flex; }
+            .dept-grid { grid-template-columns: 1fr; }
+            .doctor-grid { grid-template-columns: 1fr; }
+            .health-grid { grid-template-columns: 1fr; }
+            .loc-grid { grid-template-columns: 1fr; }
+            .testimonial-grid { grid-template-columns: 1fr; }
+            .news-grid { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .healing-inner { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2rem; }
+            .hero-stats { grid-template-columns: 1fr 1fr 1fr; }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-up { animation: fadeUp .6s ease both; }
+        .delay-1 { animation-delay: .1s; }
+        .delay-2 { animation-delay: .2s; }
+        .delay-3 { animation-delay: .3s; }
+
+        /* ===== MISC ===== */
+        .divider-accent { height: 4px; width: 48px; background: var(--teal); border-radius: 2px; margin-bottom: 0.75rem; }
+    </style>
 </head>
 <body>
-    <div class="background-elements">
-        <div class="blob purple-blob"></div>
-        <div class="blob blue-blob"></div>
+
+<!-- ===== TOP BAR ===== -->
+<div class="top-bar">
+    <div class="top-bar-inner">
+        <div class="top-bar-left">
+            <span><span class="emergency">🚨 Emergency:</span> &nbsp;111-911-911</span>
+            <span>|</span>
+            <span>📍 Find a Location</span>
+            <span>|</span>
+            <span>🕐 Open 24/7</span>
+        </div>
+        <div class="top-bar-right">
+            <a href="#">Patient Portal Login</a>
+            <a href="international-services.html">International Patients</a>
+            <a href="dashboard.html" class="btn-staff">Staff / Admin Login</a>
+        </div>
     </div>
+</div>
 
-    <nav class="glass-nav">
-        <div class="logo">
-            <span class="logo-icon">🫀</span> HMS <span>Pro</span>
-        </div>
-        <div class="nav-links">
-            <a href="index.html" class="active">Home</a>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="#about">About</a>
-        </div>
-        <button class="btn-primary" onclick="window.location.href='dashboard.html'">Login Provider</button>
-    </nav>
+<!-- ===== MAIN NAV ===== -->
+<nav class="main-nav">
+    <div class="nav-inner">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">🏥</span>
+            HMS<span class="plus"> Pro</span>
+        </a>
 
-    <main class="hero-section">
-        <div class="hero-content">
-            <div class="badge">✨ Next-Generation Healthcare</div>
-            <h1>Smart <span>Hospital Management</span> At Your Fingertips</h1>
-            <p>Experience a seamless, fast, and secure way to manage appointments, patients, and hospital staff with our cutting-edge web platform.</p>
-            
-            <div class="hero-buttons">
-                <button class="btn-primary large" onclick="window.location.href='dashboard.html'">Go to Dashboard</button>
-                <button class="btn-secondary large">View Features</button>
-            </div>
-            
-            <div class="stats-row">
-                <div class="stat"><span class="stat-num">24/7</span><span class="stat-text">Availability</span></div>
-                <div class="stat"><span class="stat-num">99.9%</span><span class="stat-text">Uptime</span></div>
-                <div class="stat"><span class="stat-num">10k+</span><span class="stat-text">Patients</span></div>
-            </div>
-        </div>
-        
-        <div class="hero-visual">
-            <div class="glass-card main-card">
-                <div class="card-header">
-                    <h3>Today's Overview</h3>
-                    <span class="status online">Live</span>
-                </div>
-                <div class="dashboard-mock">
-                    <div class="mock-item">
-                        <div class="icon-box pulse">📅</div>
-                        <div class="mock-text">
-                            <h4>42 Appointments</h4>
-                            <p>Next: Dr. Smith in 10 mins</p>
-                        </div>
-                    </div>
-                    <div class="mock-item">
-                        <div class="icon-box blue">🩺</div>
-                        <div class="mock-text">
-                            <h4>18 Staff Active</h4>
-                            <p>3 Departments busy</p>
-                        </div>
-                    </div>
+        <div class="nav-links-main">
+            <!-- Care at HMS -->
+            <div class="nav-item-wrap">
+                <a href="javascript:void(0)" class="active">Care at HMS Pro
+                    <svg viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z"/></svg>
+                </a>
+                <div class="mega-menu">
+                    <h4>Patient Care</h4>
+                    <a href="find-doctor.html">Find a Doctor</a>
+                    <a href="request-appointment.html">Book Appointment</a>
+                    <a href="admission-guidelines.html">Admission Guidelines</a>
+                    <a href="welfare-support.html">Welfare &amp; Support</a>
+                    <a href="billing-insurance.html">Billing &amp; Insurance</a>
+                    <a href="international-services.html">International Services</a>
+                    <a href="patient-visitor-guide.html">Patient &amp; Visitor Guide</a>
                 </div>
             </div>
+
+            <!-- Health Library -->
+            <div class="nav-item-wrap">
+                <a href="javascript:void(0)">Health Library
+                    <svg viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z"/></svg>
+                </a>
+                <div class="mega-menu">
+                    <h4>Health Resources</h4>
+                    <a href="diseases-conditions.html">Diseases &amp; Conditions</a>
+                    <a href="#">Symptoms Checker</a>
+                    <a href="#">Tests &amp; Procedures</a>
+                    <a href="#">Drugs &amp; Supplements</a>
+                    <a href="#">Healthy Lifestyle</a>
+                    <a href="#">Health Newsletters</a>
+                </div>
+            </div>
+
+            <!-- Departments -->
+            <div class="nav-item-wrap">
+                <a href="javascript:void(0)">Departments
+                    <svg viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z"/></svg>
+                </a>
+                <div class="mega-menu">
+                    <h4>Departments</h4>
+                    <a href="dept-cardiology.html">Cardiology</a>
+                    <a href="dept-neurology.html">Neurology</a>
+                    <a href="dept-pediatrics.html">Pediatrics</a>
+                    <a href="dept-orthopedics.html">Orthopedics</a>
+                    <a href="clinical-labs.html">Clinical Labs</a>
+                    <a href="#">Oncology</a>
+                    <a href="#">Emergency Medicine</a>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div class="nav-item-wrap">
+                <a href="javascript:void(0)">About Us
+                    <svg viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z"/></svg>
+                </a>
+                <div class="mega-menu">
+                    <h4>About HMS Pro</h4>
+                    <a href="vision-mission.html">Vision &amp; Mission</a>
+                    <a href="leadership.html">Leadership</a>
+                    <a href="accreditations.html">Accreditations</a>
+                    <a href="#">Research &amp; Innovation</a>
+                    <a href="#">News &amp; Media</a>
+                    <a href="#">Careers</a>
+                </div>
+            </div>
+
+            <div class="nav-item-wrap">
+                <a href="clinical-labs.html">Clinical Labs</a>
+            </div>
         </div>
-    </main>
-    <script src="app.js"></script>
+
+        <div class="nav-actions">
+            <a href="find-doctor.html" class="btn-nav-secondary">Find a Doctor</a>
+            <a href="request-appointment.html" class="btn-nav-primary">Book Appointment</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-left">
+            <div class="hero-eyebrow animate-up">
+                🏆 &nbsp;Ranked #1 Hospital in the Region
+            </div>
+            <h1 class="animate-up delay-1">
+                Healing Starts <em>Here.</em><br>The Right Care,<br>The First Time.
+            </h1>
+            <p class="animate-up delay-2">
+                From finding top specialists to advanced diagnostics and compassionate recovery — 
+                HMS Pro is committed to your holistic wellness every step of the way.
+            </p>
+            <div class="hero-buttons animate-up delay-3">
+                <a href="request-appointment.html" class="btn-hero-primary">Request Appointment</a>
+                <a href="find-doctor.html" class="btn-hero-secondary">Find a Doctor</a>
+            </div>
+            <div class="hero-stats animate-up">
+                <div class="hero-stat">
+                    <strong>1,200<span style="font-size:1.2rem;">+</span></strong>
+                    <span>Specialists</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>98%</strong>
+                    <span>Patient Satisfaction</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>24/7</strong>
+                    <span>Emergency Care</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="quick-card" onclick="window.location.href='find-doctor.html'">
+                <div class="card-icon teal"><i class="fa-solid fa-user-doctor"></i></div>
+                <div>
+                    <h4>Find a Doctor</h4>
+                    <p>Search by specialty, name, or condition</p>
+                </div>
+                <div class="arrow">›</div>
+            </div>
+            <div class="quick-card" onclick="window.location.href='request-appointment.html'">
+                <div class="card-icon blue"><i class="fa-regular fa-calendar-check"></i></div>
+                <div>
+                    <h4>Book Appointment</h4>
+                    <p>Schedule your visit online, instantly</p>
+                </div>
+                <div class="arrow">›</div>
+            </div>
+            <div class="quick-card" onclick="window.location.href='clinical-labs.html'">
+                <div class="card-icon amber"><i class="fa-solid fa-flask"></i></div>
+                <div>
+                    <h4>Lab Results</h4>
+                    <p>View your results securely online</p>
+                </div>
+                <div class="arrow">›</div>
+            </div>
+            <div class="quick-card">
+                <div class="card-icon purple"><i class="fa-regular fa-credit-card"></i></div>
+                <div>
+                    <h4>Pay Online</h4>
+                    <p>Quick &amp; secure bill payments</p>
+                </div>
+                <div class="arrow">›</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SEARCH ===== -->
+<div class="search-section">
+    <div class="search-inner">
+        <h2>What can we help you find?</h2>
+        <p>Search diseases, doctors, procedures, or health topics</p>
+        <div class="search-bar">
+            <input type="text" id="siteSearch" placeholder="E.g. heart disease, Dr. Smith, MRI…" autocomplete="off">
+            <button onclick="handleSearch()">Search</button>
+        </div>
+        <div class="search-tabs">
+            <span class="search-tab active" onclick="setSearchTab(this,'doctor')">Doctors</span>
+            <span class="search-tab" onclick="setSearchTab(this,'condition')">Conditions</span>
+            <span class="search-tab" onclick="setSearchTab(this,'procedure')">Procedures</span>
+            <span class="search-tab" onclick="setSearchTab(this,'drug')">Drugs &amp; Supplements</span>
+            <span class="search-tab" onclick="setSearchTab(this,'symptom')">Symptoms</span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== A-Z DISEASE FINDER ===== -->
+<div class="az-section">
+    <div class="az-inner">
+        <div class="az-header">
+            <div>
+                <h2>Find Diseases &amp; Conditions</h2>
+                <p>Browse our comprehensive health library by first letter</p>
+            </div>
+            <a href="#" style="color:var(--teal-light); font-weight:700; font-size:0.88rem;">View All Conditions →</a>
+        </div>
+        <div class="az-grid" id="azGrid"></div>
+    </div>
+</div>
+
+<!-- ===== STATS BAND ===== -->
+<div class="stats-band">
+    <div class="container">
+        <div class="stats-row">
+            <div class="stat-item">
+                <strong>450,000<span style="font-size:1.5rem;">+</span></strong>
+                <span>Patients Served Annually</span>
+            </div>
+            <div class="stat-item">
+                <strong>62</strong>
+                <span>Medical Specialties</span>
+            </div>
+            <div class="stat-item">
+                <strong>30+</strong>
+                <span>Years of Excellence</span>
+            </div>
+            <div class="stat-item">
+                <strong>99.1%</strong>
+                <span>Successful Surgery Rate</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== DEPARTMENTS ===== -->
+<section class="section">
+    <div class="container">
+        <div class="section-header-row section-header">
+            <div>
+                <div class="divider-accent"></div>
+                <h2>Our Departments &amp; Centers</h2>
+                <p>World-class care across every medical specialty</p>
+            </div>
+            <a href="#" class="view-all-link">View All Departments →</a>
+        </div>
+        <div class="dept-grid">
+            <div class="dept-card" onclick="window.location.href='dept-cardiology.html'">
+                <div class="dept-card-top c1"><i class="fa-solid fa-heart" style="color:#e11d48;"></i></div>
+                <div class="dept-card-body">
+                    <h3>Cardiology</h3>
+                    <p>Advanced heart care, cardiac surgery, and cardiac rehabilitation programs.</p>
+                    <a href="dept-cardiology.html">Learn more →</a>
+                </div>
+            </div>
+            <div class="dept-card" onclick="window.location.href='dept-neurology.html'">
+                <div class="dept-card-top c2"><i class="fa-solid fa-brain" style="color:#9333ea;"></i></div>
+                <div class="dept-card-body">
+                    <h3>Neurology</h3>
+                    <p>Diagnosis and treatment of neurological disorders including stroke and epilepsy.</p>
+                    <a href="dept-neurology.html">Learn more →</a>
+                </div>
+            </div>
+            <div class="dept-card" onclick="window.location.href='dept-pediatrics.html'">
+                <div class="dept-card-top c3"><i class="fa-solid fa-child" style="color:#16a34a;"></i></div>
+                <div class="dept-card-body">
+                    <h3>Pediatrics</h3>
+                    <p>Specialized child health services from newborns to adolescents.</p>
+                    <a href="dept-pediatrics.html">Learn more →</a>
+                </div>
+            </div>
+            <div class="dept-card" onclick="window.location.href='dept-orthopedics.html'">
+                <div class="dept-card-top c4"><i class="fa-solid fa-bone" style="color:#94a3b8;"></i></div>
+                <div class="dept-card-body">
+                    <h3>Orthopedics</h3>
+                    <p>Joint replacement, sports medicine, spine surgery, and fracture care.</p>
+                    <a href="dept-orthopedics.html">Learn more →</a>
+                </div>
+            </div>
+            <div class="dept-card" onclick="window.location.href='clinical-labs.html'">
+                <div class="dept-card-top c5"><i class="fa-solid fa-microscope" style="color:#0284c7;"></i></div>
+                <div class="dept-card-body">
+                    <h3>Clinical Labs</h3>
+                    <p>State-of-the-art diagnostics with fast, accurate results.</p>
+                    <a href="clinical-labs.html">Learn more →</a>
+                </div>
+            </div>
+            <div class="dept-card">
+                <div class="dept-card-top c6"><i class="fa-solid fa-lungs" style="color:#ea580c;"></i></div>
+                <div class="dept-card-body">
+                    <h3>Pulmonology</h3>
+                    <p>Comprehensive lung and respiratory care including asthma management.</p>
+                    <a href="#">Learn more →</a>
+                </div>
+            </div>
+            <div class="dept-card">
+                <div class="dept-card-top c7"><i class="fa-solid fa-x-ray" style="color:#475569;"></i></div>
+                <div class="dept-card-body">
+                    <h3>Radiology</h3>
+                    <p>MRI, CT scans, X-ray, ultrasound, and interventional radiology.</p>
+                    <a href="#">Learn more →</a>
+                </div>
+            </div>
+            <div class="dept-card">
+                <div class="dept-card-top c8"><i class="fa-solid fa-notes-medical" style="color:#dc2626;"></i></div>
+                <div class="dept-card-body">
+                    <h3>Emergency Medicine</h3>
+                    <p>24/7 emergency care with Level 1 trauma center capabilities.</p>
+                    <a href="#">Learn more →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== HEALING CTA SECTION ===== -->
+<section class="healing-section">
+    <div class="healing-inner">
+        <div class="healing-content">
+            <div class="tag" style="background:rgba(0,169,157,0.2); color:#7ae7df;">✨ Why Choose HMS Pro</div>
+            <h2>The Right Answers,<br>The First Time.</h2>
+            <p>Effective treatment starts with an accurate diagnosis. Our world-renowned specialists use cutting-edge technology to diagnose and treat even the most complex medical challenges.</p>
+            <div class="healing-features">
+                <div class="healing-feature">
+                    <div class="feat-icon">🏆</div>
+                    <div>
+                        <h4>Ranked #1 in the Region</h4>
+                        <p>Recognized for excellence across 20+ medical specialties by leading health publications.</p>
+                    </div>
+                </div>
+                <div class="healing-feature">
+                    <div class="feat-icon">🔬</div>
+                    <div>
+                        <h4>Cutting-edge Research</h4>
+                        <p>Our patients benefit from the latest clinical trials and breakthrough treatments.</p>
+                    </div>
+                </div>
+                <div class="healing-feature">
+                    <div class="feat-icon">🤝</div>
+                    <div>
+                        <h4>Patient-Centered Care</h4>
+                        <p>Every decision is made with YOUR health, wellbeing, and preferences at the center.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="healing-card">
+            <h3>📅 Today's Schedule — Live</h3>
+            <div class="healing-item">
+                <div class="healing-item-left">
+                    <div class="ava">👩‍⚕️</div>
+                    <span>Dr. Sarah Smith — Cardiology</span>
+                </div>
+                <div class="healing-item-right">09:00 AM</div>
+            </div>
+            <div class="healing-item">
+                <div class="healing-item-left">
+                    <div class="ava">👨‍⚕️</div>
+                    <span>Dr. Michael Chen — Neurology</span>
+                </div>
+                <div class="healing-item-right">10:30 AM</div>
+            </div>
+            <div class="healing-item">
+                <div class="healing-item-left">
+                    <div class="ava">👩‍⚕️</div>
+                    <span>Dr. Emily Davis — Pediatrics</span>
+                </div>
+                <div class="healing-item-right">11:15 AM</div>
+            </div>
+            <div class="healing-item">
+                <div class="healing-item-left">
+                    <div class="ava">👨‍⚕️</div>
+                    <span>Dr. James Wilson — Orthopedics</span>
+                </div>
+                <div class="healing-item-right">02:00 PM</div>
+            </div>
+            <a href="request-appointment.html" style="display:block; background:var(--teal); color:#fff; text-align:center; padding:0.85rem; border-radius:var(--radius); font-weight:700; font-size:0.95rem;">
+                Book an Appointment Now →
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FEATURED DOCTORS ===== -->
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header-row section-header">
+            <div>
+                <div class="divider-accent"></div>
+                <h2>Our Expert Physicians</h2>
+                <p>Meet the specialists who make world-class care possible</p>
+            </div>
+            <a href="find-doctor.html" class="view-all-link">Find All Doctors →</a>
+        </div>
+        <div class="doctor-grid">
+            <div class="doctor-card" onclick="window.location.href='find-doctor.html'">
+                <div class="doctor-avatar" style="background:linear-gradient(135deg,#e8f4f8,#c0dbf5);">👩‍⚕️</div>
+                <h3>Dr. Sarah Smith</h3>
+                <div class="specialty">Cardiology</div>
+                <div class="rating"><strong>⭐ 4.9</strong> &nbsp;(312 reviews)</div>
+                <a href="request-appointment.html" class="btn-sm-outline">Book Appointment</a>
+            </div>
+            <div class="doctor-card" onclick="window.location.href='find-doctor.html'">
+                <div class="doctor-avatar" style="background:linear-gradient(135deg,#f0e8f8,#dcc8f0);">👨‍⚕️</div>
+                <h3>Dr. Michael Chen</h3>
+                <div class="specialty">Neurology</div>
+                <div class="rating"><strong>⭐ 4.8</strong> &nbsp;(287 reviews)</div>
+                <a href="request-appointment.html" class="btn-sm-outline">Book Appointment</a>
+            </div>
+            <div class="doctor-card" onclick="window.location.href='find-doctor.html'">
+                <div class="doctor-avatar" style="background:linear-gradient(135deg,#e8f8f0,#c8f0dc);">👩‍⚕️</div>
+                <h3>Dr. Emily Davis</h3>
+                <div class="specialty">Pediatrics</div>
+                <div class="rating"><strong>⭐ 5.0</strong> &nbsp;(401 reviews)</div>
+                <a href="request-appointment.html" class="btn-sm-outline">Book Appointment</a>
+            </div>
+            <div class="doctor-card" onclick="window.location.href='find-doctor.html'">
+                <div class="doctor-avatar" style="background:linear-gradient(135deg,#f8f0e8,#f0d8c8);">👨‍⚕️</div>
+                <h3>Dr. James Wilson</h3>
+                <div class="specialty">Orthopedics</div>
+                <div class="rating"><strong>⭐ 4.7</strong> &nbsp;(256 reviews)</div>
+                <a href="request-appointment.html" class="btn-sm-outline">Book Appointment</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== HEALTH LIBRARY ===== -->
+<section class="section">
+    <div class="container">
+        <div class="section-header-row section-header">
+            <div>
+                <div class="divider-accent"></div>
+                <h2>Health Library</h2>
+                <p>Trusted health information written and reviewed by our specialists</p>
+            </div>
+            <a href="#" class="view-all-link">Browse Full Library →</a>
+        </div>
+        <div class="health-grid">
+            <div class="health-card">
+                <div class="health-card-img h1">❤️‍🔥</div>
+                <div class="health-card-body">
+                    <div class="cat">Cardiology</div>
+                    <h3>Understanding Heart Disease: Symptoms, Causes &amp; Prevention</h3>
+                    <p>Heart disease remains the leading cause of death worldwide. Learn how to recognize early warning signs and protect your heart.</p>
+                    <a href="#">Read Article →</a>
+                </div>
+            </div>
+            <div class="health-card">
+                <div class="health-card-img h2">🩺</div>
+                <div class="health-card-body">
+                    <div class="cat">Diabetes</div>
+                    <h3>Managing Type 2 Diabetes Through Diet &amp; Exercise</h3>
+                    <p>Lifestyle changes remain one of the most powerful tools to control blood sugar and prevent complications.</p>
+                    <a href="#">Read Article →</a>
+                </div>
+            </div>
+            <div class="health-card">
+                <div class="health-card-img h3">🧠</div>
+                <div class="health-card-body">
+                    <div class="cat">Neurology</div>
+                    <h3>Early Signs of Stroke: Act FAST to Save a Life</h3>
+                    <p>Every second counts during a stroke. Learn the FAST acronym and what to do in an emergency.</p>
+                    <a href="#">Read Article →</a>
+                </div>
+            </div>
+            <div class="health-card">
+                <div class="health-card-img h4">🫁</div>
+                <div class="health-card-body">
+                    <div class="cat">Pulmonology</div>
+                    <h3>Asthma Triggers: How to Identify and Avoid Them</h3>
+                    <p>From allergens to air quality, understanding your triggers is key to controlling asthma effectively.</p>
+                    <a href="#">Read Article →</a>
+                </div>
+            </div>
+            <div class="health-card">
+                <div class="health-card-img h5">🦴</div>
+                <div class="health-card-body">
+                    <div class="cat">Orthopedics</div>
+                    <h3>When Is It Time for a Knee Replacement?</h3>
+                    <p>Persistent knee pain, stiffness, and limited mobility may signal it's time to discuss surgical options.</p>
+                    <a href="#">Read Article →</a>
+                </div>
+            </div>
+            <div class="health-card">
+                <div class="health-card-img h6">🧒</div>
+                <div class="health-card-body">
+                    <div class="cat">Pediatrics</div>
+                    <h3>Childhood Vaccination Schedule: What Parents Need to Know</h3>
+                    <p>Vaccines protect children from serious diseases. Here's a comprehensive guide from newborns to age 18.</p>
+                    <a href="#">Read Article →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== LOCATIONS ===== -->
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header-row section-header">
+            <div>
+                <div class="divider-accent"></div>
+                <h2>Our Locations</h2>
+                <p>World-class care close to where you are</p>
+            </div>
+            <a href="#" class="view-all-link">Explore All Locations →</a>
+        </div>
+        <div class="loc-grid">
+            <div class="loc-card">
+                <div class="loc-map l1">🏙️</div>
+                <div class="loc-body">
+                    <h3>HMS Pro — Main Campus</h3>
+                    <p>Our flagship hospital offering the full spectrum of medical services and emergency care.</p>
+                    <div class="loc-meta">
+                        <span>📍 123 Medical Drive, City Center</span>
+                        <span>🕐 Open 24/7</span>
+                    </div>
+                    <a href="#">Get Directions →</a>
+                </div>
+            </div>
+            <div class="loc-card">
+                <div class="loc-map l2">🌿</div>
+                <div class="loc-body">
+                    <h3>HMS Pro — North Clinic</h3>
+                    <p>Outpatient services, specialist consultations, and diagnostic imaging.</p>
+                    <div class="loc-meta">
+                        <span>📍 456 North Ave, Suburbs</span>
+                        <span>🕐 Mon–Sat 8am–8pm</span>
+                    </div>
+                    <a href="#">Get Directions →</a>
+                </div>
+            </div>
+            <div class="loc-card">
+                <div class="loc-map l3">🏗️</div>
+                <div class="loc-body">
+                    <h3>HMS Pro — East Wing</h3>
+                    <p>Children's health center with specialized pediatric emergency and inpatient care.</p>
+                    <div class="loc-meta">
+                        <span>📍 789 East Blvd, East District</span>
+                        <span>🕐 Open 24/7</span>
+                    </div>
+                    <a href="#">Get Directions →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="section">
+    <div class="container">
+        <div class="section-header" style="text-align:center;">
+            <div class="divider-accent" style="margin:0 auto 0.75rem;"></div>
+            <h2>What Our Patients Say</h2>
+            <p>Real stories from the patients and families we've had the privilege to care for</p>
+        </div>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"The cardiology team at HMS Pro saved my life. Dr. Smith diagnosed my condition that three other hospitals had missed. The care was extraordinary from admission to discharge."</p>
+                <div class="testimonial-author">
+                    <div class="ava">JA</div>
+                    <div>
+                        <strong>James Ahmad</strong>
+                        <span>Cardiology Patient</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"Bringing my daughter here for her pediatric checkup was the best decision. Dr. Davis was incredibly patient and thorough. The hospital is clean, modern, and welcoming."</p>
+                <div class="testimonial-author">
+                    <div class="ava">FN</div>
+                    <div>
+                        <strong>Fatima Noor</strong>
+                        <span>Parent — Pediatrics</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"After my knee replacement surgery with Dr. Wilson, I was back to hiking in 3 months. The physical therapy team and post-op follow-up made all the difference."</p>
+                <div class="testimonial-author">
+                    <div class="ava">MK</div>
+                    <div>
+                        <strong>Muhammad Khan</strong>
+                        <span>Orthopedics Patient</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== NEWS ===== -->
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header-row section-header">
+            <div>
+                <div class="divider-accent"></div>
+                <h2>Latest News &amp; Health Tips</h2>
+                <p>Stay informed with the latest medical research and health insights</p>
+            </div>
+            <a href="#" class="view-all-link">Read All Articles →</a>
+        </div>
+        <div class="news-grid">
+            <div class="news-card featured">
+                <div class="news-img n1">🫀</div>
+                <div class="news-body">
+                    <div class="cat">Research</div>
+                    <h3>HMS Pro Researchers Develop New Non-Invasive Heart Monitoring Technology</h3>
+                    <p>A breakthrough wearable device developed by our cardiology research team can detect early signs of atrial fibrillation with 97% accuracy, potentially saving thousands of lives annually.</p>
+                    <div class="date">April 10, 2026</div>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-img n2">🌿</div>
+                <div class="news-body">
+                    <div class="cat">Healthy Living</div>
+                    <h3>5 Daily Habits That Dramatically Reduce Your Risk of Stroke</h3>
+                    <p>Simple lifestyle changes can reduce stroke risk by up to 80%.</p>
+                    <div class="date">April 8, 2026</div>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-img n3">🏥</div>
+                <div class="news-body">
+                    <div class="cat">Hospital News</div>
+                    <h3>HMS Pro Opens New State-of-the-Art Cancer Treatment Center</h3>
+                    <p>Featuring the latest proton therapy and immunotherapy suites.</p>
+                    <div class="date">April 5, 2026</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== DONATE BAND ===== -->
+<div class="donate-band">
+    <div class="donate-inner">
+        <div>
+            <h2>💙 Support Life-Saving Research</h2>
+            <p>Your donation powers the future of medicine and helps patients who cannot afford care.</p>
+        </div>
+        <a href="#" class="btn-donate">Give Today</a>
+    </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo">🏥 HMS Pro</div>
+                <p>A leading provider of world-class healthcare. Committed to the needs of our patients above all else since 1994.</p>
+                <div class="footer-social">
+                    <a href="#" title="X / Twitter">𝕏</a>
+                    <a href="#" title="Facebook">f</a>
+                    <a href="#" title="YouTube">▶</a>
+                    <a href="#" title="LinkedIn">in</a>
+                    <a href="#" title="Instagram">◎</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Patient Care</h4>
+                <ul>
+                    <li><a href="find-doctor.html">Find a Doctor</a></li>
+                    <li><a href="request-appointment.html">Book Appointment</a></li>
+                    <li><a href="admission-guidelines.html">Admission Guidelines</a></li>
+                    <li><a href="welfare-support.html">Welfare &amp; Support</a></li>
+                    <li><a href="billing-insurance.html">Billing &amp; Insurance</a></li>
+                    <li><a href="international-services.html">International Patients</a></li>
+                    <li><a href="#">Patient Portal Login</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Health Library</h4>
+                <ul>
+                    <li><a href="diseases-conditions.html">Diseases &amp; Conditions</a></li>
+                    <li><a href="#">Symptoms</a></li>
+                    <li><a href="#">Tests &amp; Procedures</a></li>
+                    <li><a href="#">Drugs &amp; Supplements</a></li>
+                    <li><a href="#">Healthy Lifestyle</a></li>
+                    <li><a href="#">Health Newsletter</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Departments</h4>
+                <ul>
+                    <li><a href="dept-cardiology.html">Cardiology</a></li>
+                    <li><a href="dept-neurology.html">Neurology</a></li>
+                    <li><a href="dept-pediatrics.html">Pediatrics</a></li>
+                    <li><a href="dept-orthopedics.html">Orthopedics</a></li>
+                    <li><a href="clinical-labs.html">Clinical Labs</a></li>
+                    <li><a href="#">Oncology</a></li>
+                    <li><a href="#">Emergency Medicine</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>About HMS Pro</h4>
+                <ul>
+                    <li><a href="vision-mission.html">Vision &amp; Mission</a></li>
+                    <li><a href="leadership.html">Leadership</a></li>
+                    <li><a href="accreditations.html">Accreditations</a></li>
+                    <li><a href="#">Research</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">News &amp; Media</a></li>
+                    <li><a href="dashboard.html">Admin Login</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 1994–2026 HMS Pro Medical Center. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Terms &amp; Conditions</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Notice of Privacy Practices</a>
+                <a href="#">Digital Accessibility</a>
+                <a href="#">Site Map</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+    // --- A-Z Grid ---
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('');
+    const azGrid = document.getElementById('azGrid');
+    letters.forEach(l => {
+        const el = document.createElement('div');
+        el.className = 'az-letter';
+        el.textContent = l;
+        el.addEventListener('click', () => {
+            document.getElementById('siteSearch').value = '';
+            setSearchTab(document.querySelector('.search-tab[onclick*="condition"]'), 'condition');
+            document.querySelector('.search-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        azGrid.appendChild(el);
+    });
+
+    // --- Search ---
+    let currentSearchTab = 'doctor';
+    function setSearchTab(el, tab) {
+        document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        currentSearchTab = tab;
+        const placeholders = {
+            doctor:    'Search by doctor name or specialty…',
+            condition: 'Search diseases or conditions…',
+            procedure: 'Search tests or procedures…',
+            drug:      'Search drugs or supplements…',
+            symptom:   'Describe your symptom…'
+        };
+        document.getElementById('siteSearch').placeholder = placeholders[tab] || 'Search HMS Pro…';
+    }
+    function handleSearch() {
+        const q = document.getElementById('siteSearch').value.trim();
+        if (!q) return;
+        if (currentSearchTab === 'doctor') {
+            window.location.href = 'find-doctor.html';
+        } else {
+            alert('Searching for: "' + q + '" in ' + currentSearchTab + ' — Full health library coming soon!');
+        }
+    }
+    document.getElementById('siteSearch').addEventListener('keydown', e => {
+        if (e.key === 'Enter') handleSearch();
+    });
+
+    // --- Scroll animations ---
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.dept-card, .doctor-card, .health-card, .testimonial-card, .news-card, .loc-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(24px)';
+        el.style.transition = 'opacity .5s ease, transform .5s ease';
+        observer.observe(el);
+    });
+</script>
 </body>
 </html>

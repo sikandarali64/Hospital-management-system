@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find a Doctor - HMS Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .find-doctor-container {
+            padding: 3rem 5%;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .filters-sidebar {
+            background: rgba(20, 22, 33, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            height: fit-content;
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group h4 {
+            margin-bottom: 0.8rem;
+            color: var(--accent-secondary);
+        }
+
+        .filter-group input[type="text"], .filter-group select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 0.8rem;
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: inherit;
+        }
+        
+        .filter-group select option {
+            background: var(--bg-dark);
+            color: var(--text-main);
+        }
+
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .doctor-card {
+            background: rgba(20, 22, 33, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+        }
+
+        .doctor-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 2px solid var(--accent-secondary);
+            margin: 0 auto 1rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .doctor-info h3 {
+            margin-bottom: 0.2rem;
+        }
+
+        .doctor-info .specialty {
+            color: var(--accent-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .doctor-card .btn-primary {
+            width: 100%;
+            padding: 0.6rem;
+            font-size: 0.9rem;
+        }
+        
+        .page-header {
+            padding: 4rem 5% 2rem 5%;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .page-header p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 900px) {
+            .find-doctor-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob purple-blob"></div>
+        <div class="blob blue-blob"></div>
+    </div>
+
+    <!-- New Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <span><span style="color: #ef4444;">🚨</span> Emergency: 111-911-911</span>
+                <span class="hide-mobile">|</span>
+                <span class="hide-mobile">📍 Find a Location</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="#">Patient Portal Login</a>
+                <a href="dashboard.html" class="staff-login">Staff/Admin Login</a>
+            </div>
+        </div>
+    </div>
+
+    <nav class="glass-nav">
+        <div class="logo">
+            <span class="logo-icon">🏥</span> HMS <span>Pro</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            
+            <div class="dropdown">
+                <a href="#about" class="dropbtn">About Us ▾</a>
+                <div class="dropdown-content">
+                    <a href="vision-mission.html">Vision & Mission</a>
+                    <a href="leadership.html">Leadership</a>
+                    <a href="accreditations.html">Accreditations</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#services" class="dropbtn active">Patient Services ▾</a>
+                <div class="dropdown-content">
+                    <a href="find-doctor.html" class="active">Find a Doctor</a>
+                    <a href="request-appointment.html">Book Appointment</a>
+                    <a href="admission-guidelines.html">Admission Guidelines</a>
+                    <a href="welfare-support.html">Welfare & Support</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#departments" class="dropbtn">Departments ▾</a>
+                <div class="dropdown-content">
+                    <a href="dept-cardiology.html">Cardiology</a>
+                    <a href="dept-neurology.html">Neurology</a>
+                    <a href="dept-pediatrics.html">Pediatrics</a>
+                    <a href="dept-orthopedics.html">Orthopedics</a>
+                </div>
+            </div>
+
+            <a href="clinical-labs.html">Clinical Labs</a>
+        </div>
+        <button class="btn-primary" onclick="window.location.href='request-appointment.html'">Book Appointment</button>
+    </nav>
+    
+    <div class="page-header">
+        <h1>Find a Doctor</h1>
+        <p>Search our extensive directory of world-class specialists and healthcare professionals dedicated to your wellbeing.</p>
+    </div>
+
+    <div class="find-doctor-container">
+        <!-- Sidebar Filters -->
+        <aside class="filters-sidebar">
+            <div class="filter-group">
+                <h4>Search by Name</h4>
+                <input type="text" placeholder="Dr. Smith...">
+            </div>
+            <div class="filter-group">
+                <h4>Specialty</h4>
+                <select>
+                    <option value="">All Specialties</option>
+                    <option value="cardio">Cardiology</option>
+                    <option value="neuro">Neurology</option>
+                    <option value="ortho">Orthopedics</option>
+                    <option value="pedia">Pediatrics</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <h4>Location</h4>
+                <select>
+                    <option value="">All Locations</option>
+                    <option value="main">Main Campus</option>
+                    <option value="clinic1">North Clinic</option>
+                </select>
+            </div>
+            <button class="btn-primary" style="width: 100%; margin-top: 1rem;">Filter Results</button>
+        </aside>
+
+        <!-- Doctor Results -->
+        <div class="doctors-grid">
+            <!-- Doctor 1 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar">👩‍⚕️</div>
+                <div class="doctor-info">
+                    <h3>Dr. Sarah Smith</h3>
+                    <div class="specialty">Cardiologist</div>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1.5rem;">Main Campus • 15 Yrs Exp.</p>
+                </div>
+                <button class="btn-primary" onclick="window.location.href='request-appointment.html'">Book Appointment</button>
+            </div>
+
+            <!-- Doctor 2 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar">👨‍⚕️</div>
+                <div class="doctor-info">
+                    <h3>Dr. Michael Chen</h3>
+                    <div class="specialty">Neurologist</div>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1.5rem;">North Clinic • 12 Yrs Exp.</p>
+                </div>
+                <button class="btn-primary" onclick="window.location.href='request-appointment.html'">Book Appointment</button>
+            </div>
+            
+            <!-- Doctor 3 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar">👩‍⚕️</div>
+                <div class="doctor-info">
+                    <h3>Dr. Emily Davis</h3>
+                    <div class="specialty">Pediatrics</div>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1.5rem;">Main Campus • 8 Yrs Exp.</p>
+                </div>
+                <button class="btn-primary" onclick="window.location.href='request-appointment.html'">Book Appointment</button>
+            </div>
+            
+             <!-- Doctor 4 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar">👨‍⚕️</div>
+                <div class="doctor-info">
+                    <h3>Dr. James Wilson</h3>
+                    <div class="specialty">Orthopedics</div>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1.5rem;">Main Campus • 20 Yrs Exp.</p>
+                </div>
+                <button class="btn-primary" onclick="window.location.href='request-appointment.html'">Book Appointment</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

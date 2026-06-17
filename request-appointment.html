@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - HMS Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-header {
+            padding: 4rem 5% 2rem 5%;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .page-header p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .booking-container {
+            max-width: 800px;
+            margin: 0 auto 4rem auto;
+            background: rgba(20, 22, 33, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 1rem;
+            border-radius: 10px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group select option {
+            background: var(--bg-dark);
+            color: var(--text-main);
+        }
+        
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob purple-blob"></div>
+        <div class="blob blue-blob"></div>
+    </div>
+
+    <!-- New Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <span><span style="color: #ef4444;">🚨</span> Emergency: 111-911-911</span>
+                <span class="hide-mobile">|</span>
+                <span class="hide-mobile">📍 Find a Location</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="#">Patient Portal Login</a>
+                <a href="dashboard.html" class="staff-login">Staff/Admin Login</a>
+            </div>
+        </div>
+    </div>
+
+    <nav class="glass-nav">
+        <div class="logo">
+            <span class="logo-icon">🏥</span> HMS <span>Pro</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            
+            <div class="dropdown">
+                <a href="#about" class="dropbtn">About Us ▾</a>
+                <div class="dropdown-content">
+                    <a href="vision-mission.html">Vision & Mission</a>
+                    <a href="leadership.html">Leadership</a>
+                    <a href="accreditations.html">Accreditations</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#services" class="dropbtn active">Patient Services ▾</a>
+                <div class="dropdown-content">
+                    <a href="find-doctor.html">Find a Doctor</a>
+                    <a href="request-appointment.html" class="active">Book Appointment</a>
+                    <a href="admission-guidelines.html">Admission Guidelines</a>
+                    <a href="welfare-support.html">Welfare & Support</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#departments" class="dropbtn">Departments ▾</a>
+                <div class="dropdown-content">
+                    <a href="dept-cardiology.html">Cardiology</a>
+                    <a href="dept-neurology.html">Neurology</a>
+                    <a href="dept-pediatrics.html">Pediatrics</a>
+                    <a href="dept-orthopedics.html">Orthopedics</a>
+                </div>
+            </div>
+
+            <a href="clinical-labs.html">Clinical Labs</a>
+        </div>
+        <button class="btn-primary" onclick="window.location.href='request-appointment.html'">Book Appointment</button>
+    </nav>
+    
+    <div class="page-header">
+        <h1>Request an Appointment</h1>
+        <p>Fill out the form below and our team will get in touch with you shortly to confirm your schedule.</p>
+    </div>
+
+    <div class="booking-container">
+        <form id="appointmentForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" required placeholder="John">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" required placeholder="Doe">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required placeholder="(123) 456-7890">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required placeholder="john@example.com">
+                </div>
+                
+                <div class="form-group full-width">
+                    <label>Select Department (Optional)</label>
+                    <select id="department">
+                        <option value="">I'm not sure</option>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Neurology">Neurology</option>
+                        <option value="Orthopedics">Orthopedics</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Preferred Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Preferred Time</label>
+                    <select id="time" required>
+                        <option value="">Select Time Slot</option>
+                        <option value="09:00">Morning (9AM - 12PM)</option>
+                        <option value="14:00">Afternoon (12PM - 4PM)</option>
+                        <option value="17:00">Evening (4PM - 7PM)</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Briefly describe your reason for visit</label>
+                    <textarea id="reason" rows="4" placeholder="E.g., Follow-up consultation, experiencing chest pain..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary large" style="width: 100%;">Submit Request</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+    <script>
+        document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "Submitting...";
+            btn.disabled = true;
+            btn.style.opacity = "0.7";
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const appointmentData = {
+                patient_name: firstName + ' ' + lastName,
+                doctor: 'Unassigned',
+                department: document.getElementById('department').value || 'General',
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                reason: document.getElementById('reason').value,
+                status: 'pending'
+            };
+
+            try {
+                await insertAppointment(appointmentData);
+                showToast("Thank you! Your appointment request has been received. Our team will contact you shortly.", "success");
+                btn.innerText = "Request Sent ✔️";
+                btn.style.background = "#10b981";
+                e.target.reset();
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "";
+                    btn.style.opacity = "1";
+                    btn.disabled = false;
+                }, 3000);
+            } catch (error) {
+                console.error("Error:", error);
+                showToast("FAILED: Network error, please try again. " + error.message, "error");
+                btn.innerText = originalText;
+                btn.style.opacity = "1";
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

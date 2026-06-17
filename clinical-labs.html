@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Labs - HMS Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-header { padding: 4rem 5% 2rem 5%; text-align: center; }
+        .page-header h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .page-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+        .labs-grid {
+            max-width: 1000px; margin: 0 auto 5rem auto; padding: 0 5%;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+        }
+        .lab-card {
+            background: rgba(20,22,33,0.6); backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem;
+            text-align: center; transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .lab-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(99,102,241,0.2); }
+        .lab-card .icon { font-size: 3rem; margin-bottom: 1rem; }
+        .lab-card h3 { margin-bottom: 0.5rem; }
+        .lab-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+        .lab-cta { max-width: 600px; margin: 0 auto 5rem auto; padding: 2rem; text-align: center;
+            background: rgba(20,22,33,0.6); backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); border-radius: 20px; }
+        .lab-cta h2 { margin-bottom: 0.5rem; }
+        .lab-cta p { color: var(--text-muted); margin-bottom: 1.5rem; }
+        @media (max-width: 700px) { .labs-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 450px) { .labs-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob purple-blob"></div>
+        <div class="blob blue-blob"></div>
+    </div>
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <span><span style="color:#ef4444;">🚨</span> Emergency: 111-911-911</span>
+                <span class="hide-mobile">|</span>
+                <span class="hide-mobile">📍 Find a Location</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="patient-portal.html">Patient Portal Login</a>
+                <a href="dashboard.html" class="staff-login">Staff/Admin Login</a>
+            </div>
+        </div>
+    </div>
+    <nav class="glass-nav">
+        <div class="logo"><span class="logo-icon">🏥</span> HMS <span>Pro</span></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <div class="dropdown">
+                <a href="#about" class="dropbtn">About Us ▾</a>
+                <div class="dropdown-content">
+                    <a href="vision-mission.html">Vision & Mission</a>
+                    <a href="leadership.html">Leadership</a>
+                    <a href="accreditations.html">Accreditations</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#services" class="dropbtn">Patient Services ▾</a>
+                <div class="dropdown-content">
+                    <a href="find-doctor.html">Find a Doctor</a>
+                    <a href="request-appointment.html">Book Appointment</a>
+                    <a href="admission-guidelines.html">Admission Guidelines</a>
+                    <a href="welfare-support.html">Welfare & Support</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#departments" class="dropbtn">Departments ▾</a>
+                <div class="dropdown-content">
+                    <a href="dept-cardiology.html">Cardiology</a>
+                    <a href="dept-neurology.html">Neurology</a>
+                    <a href="dept-pediatrics.html">Pediatrics</a>
+                    <a href="dept-orthopedics.html">Orthopedics</a>
+                </div>
+            </div>
+            <a href="clinical-labs.html" class="active">Clinical Labs</a>
+        </div>
+        <button class="btn-primary" onclick="window.location.href='request-appointment.html'">Book Appointment</button>
+    </nav>
+
+    <div class="page-header">
+        <h1>Clinical Laboratories</h1>
+        <p>CAP-accredited laboratory services delivering fast, accurate, and reliable diagnostic results.</p>
+    </div>
+
+    <div class="labs-grid">
+        <div class="lab-card"><div class="icon">🩸</div><h3>Hematology</h3><p>Complete blood count, blood typing, coagulation studies, and advanced hematological diagnostics.</p></div>
+        <div class="lab-card"><div class="icon">🧪</div><h3>Biochemistry</h3><p>Kidney function tests, liver panels, lipid profiles, blood glucose, thyroid function, and more.</p></div>
+        <div class="lab-card"><div class="icon">🦠</div><h3>Microbiology</h3><p>Culture and sensitivity testing, viral studies, and rapid diagnostic tests for infectious diseases.</p></div>
+        <div class="lab-card"><div class="icon">🔬</div><h3>Histopathology</h3><p>Tissue biopsy analysis, frozen sections, and cancer diagnosis reviewed by expert pathologists.</p></div>
+        <div class="lab-card"><div class="icon">💧</div><h3>Urine Analysis</h3><p>Routine urinalysis, urine culture, and 24-hour urine collection studies for metabolic conditions.</p></div>
+        <div class="lab-card"><div class="icon">🧬</div><h3>Molecular Diagnostics</h3><p>PCR testing, genetic panels, and advanced molecular techniques for precision diagnostics.</p></div>
+    </div>
+
+    <div class="lab-cta">
+        <h2>Get Your Reports Online</h2>
+        <p>Sign in to the Patient Portal to view your lab results securely, any time, from anywhere.</p>
+        <button class="btn-primary large" onclick="alert('Patient Portal coming soon!')">Access Lab Reports</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</body>
+</html>

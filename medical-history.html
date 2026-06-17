@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMS - Medical History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .page-header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .patient-search-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .patient-info-card {
+            display: none; /* hidden until a patient is selected */
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(14, 165, 233, 0.05));
+            border: 1px solid var(--accent-primary);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .patient-info-card.active {
+            display: block;
+        }
+
+        .pi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .pi-item label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+        }
+
+        .pi-item strong {
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        /* Timeline Styles */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin-top: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--glass-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            box-shadow: 0 0 10px var(--accent-primary);
+        }
+
+        .ti-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .ti-date {
+            color: var(--accent-secondary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .ti-doctor {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ti-content h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .ti-content p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .prescription-box {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+        .prescription-box span { display: block; font-weight: 600; color: #10b981; margin-bottom: 0.3rem; }
+
+        /* Modal specific (inherited mostly) */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(6px); z-index: 9999; align-items: center; justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: var(--bg-dark); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 2.5rem; width: 100%; max-width: 500px;
+            position: relative; animation: fadeInModal 0.3s ease;
+        }
+        @keyframes fadeInModal { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-close { position: absolute; top: 1rem; right: 1.2rem; background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; }
+        .modal-form label { font-size: 0.88rem; color: var(--text-muted); }
+        .form-row { margin-bottom: 1rem; }
+        .modal-form input, .modal-form select, .modal-form textarea {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+            padding: 0.8rem 1rem; border-radius: 10px; color: var(--text-main);
+            font-family: inherit; font-size: 0.95rem; width: 100%; box-sizing: border-box; margin-top: 0.4rem;
+        }
+        .modal-form textarea { resize: vertical; min-height: 80px; }
+        .modal-form input:focus, .modal-form select:focus, .modal-form textarea:focus {
+            outline: none; border-color: var(--accent-primary);
+        }
+        .modal-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
+
+        /* Search Dropdown styling */
+        #searchResults {
+            margin-top: 0.5rem; background: var(--bg-dark); border: 1px solid var(--glass-border);
+            border-radius: 10px; max-height: 200px; overflow-y: auto; display: none;
+        }
+        #searchResults.open { display: block; }
+        .search-item {
+            padding: 0.8rem 1rem; cursor: pointer; border-bottom: 1px solid var(--glass-border); transition: background 0.2s;
+        }
+        .search-item:hover { background: rgba(99,102,241,0.1); }
+        .search-item:last-child { border-bottom: none; }
+        
+        .empty-history { text-align: center; color: var(--text-muted); padding: 3rem 1rem; border: 1px dashed var(--glass-border); border-radius: 15px; margin-top: 2rem;}
+    </style>
+</head>
+<body class="dashboard-body">
+    <div class="background-elements">
+        <div class="blob purple-blob" style="width: 400px; height: 400px; top: -10%; left: -5%;"></div>
+        <div class="blob blue-blob" style="width: 500px; height: 500px; bottom: -20%; right: -10%;"></div>
+    </div>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar glass-panel">
+            <div class="logo sidebar-logo">
+                <span class="logo-icon">🏥</span> HMS <span>Pro</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <p class="nav-label">Main Menu</p>
+                    <a href="dashboard.html" class="nav-item">
+                        <span class="icon">📊</span>
+                        <span>Overview</span>
+                    </a>
+                    <a href="register.html" class="nav-item">
+                        <span class="icon">📝</span>
+                        <span>Register Patient</span>
+                    </a>
+                    <a href="doctors.html" class="nav-item">
+                        <span class="icon">🩺</span>
+                        <span>Doctors</span>
+                    </a>
+                    <a href="appointments.html" class="nav-item">
+                        <span class="icon">📅</span>
+                        <span>Appointments</span>
+                    </a>
+                    <a href="medical-history.html" class="nav-item active">
+                        <span class="icon">📁</span>
+                        <span>Medical History</span>
+                    </a>
+                </div>
+                
+                <div class="nav-group">
+                    <p class="nav-label">Settings</p>
+                    <a href="settings.html" class="nav-item">
+                        <span class="icon">⚙️</span>
+                        <span>System Settings</span>
+                    </a>
+                    <a href="index.html" class="nav-item text-danger">
+                        <span class="icon">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-content">
+            <header class="dashboard-header glass-panel">
+                <button id="hamburgerBtn">☰</button>
+                <div class="header-profile" style="margin-left: auto;">
+                    <button id="themeToggleBtn" style="background:none;border:none;font-size:1.5rem;cursor:pointer;margin-right:1rem;">🌙</button>
+                    <div class="notification-btn">🔔<span class="badge-dot"></span></div>
+                    <div class="admin-profile">
+                        <div class="avatar">AD</div>
+                        <span class="hide-mobile">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="glass-panel" style="padding: 2rem;">
+                <div class="page-header">
+                    <div>
+                        <h2>Medical History & Records</h2>
+                        <p style="color: var(--text-muted);">View and manage patient clinical records.</p>
+                    </div>
+                </div>
+
+                <!-- Patient Search Section -->
+                <div class="patient-search-card">
+                    <label style="display:block;margin-bottom:0.5rem;font-weight:600;">Search Patient</label>
+                    <input type="text" id="patientSearchInput" placeholder="Enter patient name..." style="width:100%; padding: 1rem; border-radius:10px; background:var(--bg-dark); border:1px solid var(--glass-border); color:var(--text-main);">
+                    <div id="searchResults"></div>
+                </div>
+
+                <!-- Selected Patient Dashboard -->
+                <div id="patientInfoCard" class="patient-info-card">
+                    <div class="pi-header">
+                        <div>
+                            <h3 id="piName">Patient Name</h3>
+                            <span class="status-badge" style="background: rgba(99,102,241,0.2); color:#818cf8; margin-top:0.5rem; display:inline-block;" id="piDept">Department</span>
+                        </div>
+                        <button class="btn-primary small" id="addRecordBtn">+ Add Record</button>
+                    </div>
+                    
+                    <div class="pi-grid">
+                        <div class="pi-item">
+                            <label>Patient ID / Key</label>
+                            <strong id="piId" style="font-size: 0.8rem;">---</strong>
+                        </div>
+                        <div class="pi-item">
+                            <label>Gender / DOB</label>
+                            <strong id="piGenderDob">---</strong>
+                        </div>
+                        <div class="pi-item">
+                            <label>Primary Doctor</label>
+                            <strong id="piDoctor">---</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Section -->
+                <div id="timelineSection" style="display:none;">
+                    <h3 style="margin-bottom:1rem; border-bottom:1px solid var(--glass-border); padding-bottom:1rem;">Clinical Records</h3>
+                    <div id="timelineContainer" class="timeline">
+                        <!-- Records logic will put content here -->
+                    </div>
+                </div>
+                
+                <div id="pleaseSelectMsg" style="text-align:center;color:var(--text-muted);padding:4rem 0;">
+                    <div style="font-size: 4rem; opacity: 0.5; margin-bottom: 1rem;">📁</div>
+                    <p>Search and select a patient to view their medical history.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Record Modal -->
+    <div class="modal-overlay" id="addRecordModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('addRecordModal')">&#x2715;</button>
+            <h3>📁 Add Clinical Record</h3>
+            <p>Save notes, diagnosis, and prescriptions</p>
+            <form class="modal-form" id="recordForm">
+                <input type="hidden" id="rPatientId">
+
+                <div class="form-row">
+                    <label>Date of Visit</label>
+                    <input type="date" id="rDate" required>
+                </div>
+                
+                <div class="form-row">
+                    <label>Doctor / Examiner</label>
+                    <input type="text" id="rDoctor" required placeholder="Ex. Dr. Sarah Smith">
+                </div>
+
+                <div class="form-row">
+                    <label>Diagnosis / Condition</label>
+                    <input type="text" id="rDiagnosis" required placeholder="Ex. Viral Fever, Hypertension">
+                </div>
+
+                <div class="form-row">
+                    <label>Medicines / Prescription</label>
+                    <textarea id="rPrescription" placeholder="Panadol 500mg, 1x3 times a day..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <label>Additional Notes / Reports</label>
+                    <textarea id="rNotes" placeholder="Blood pressure normal. Recommended rest."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('addRecordModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+    <script>
+        let currentPatientId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('rDate').value = new Date().toISOString().split('T')[0];
+        });
+
+        // Search logic
+        const searchInput = document.getElementById('patientSearchInput');
+        const searchResults = document.getElementById('searchResults');
+        
+        searchInput.addEventListener('input', () => {
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(searchPatients, 500);
+        });
+
+        async function searchPatients() {
+            const query = searchInput.value;
+            if(!query || query.length < 2) {
+                searchResults.classList.remove('open');
+                return;
+            }
+
+            try {
+                const db = getSupabase();
+                const { data, error } = await db.from('patients')
+                    .select('*')
+                    .ilike('first_name', `%${query}%`)
+                    .limit(5);
+
+                if(error) throw error;
+
+                searchResults.innerHTML = '';
+                if(data.length === 0) {
+                    searchResults.innerHTML = '<div class="search-item">No patient found</div>';
+                } else {
+                    data.forEach(p => {
+                        const div = document.createElement('div');
+                        div.className = 'search-item';
+                        div.innerHTML = `<strong>${p.first_name} ${p.last_name}</strong> - <span>${p.phone}</span>`;
+                        div.addEventListener('click', () => loadPatientDashboard(p));
+                        searchResults.appendChild(div);
+                    });
+                }
+                searchResults.classList.add('open');
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Hide search results on outside click
+        document.addEventListener('click', (e) => {
+            if(!searchResults.contains(e.target) && e.target !== searchInput) {
+                searchResults.classList.remove('open');
+            }
+        });
+
+        // Load Patient Dashboard
+        function loadPatientDashboard(patient) {
+            currentPatientId = patient.id;
+            
+            // Hide Search panel, show Info card
+            searchResults.classList.remove('open');
+            searchInput.value = '';
+
+            document.getElementById('pleaseSelectMsg').style.display = 'none';
+            document.getElementById('patientInfoCard').classList.add('active');
+            document.getElementById('timelineSection').style.display = 'block';
+
+            // Fill Data
+            document.getElementById('piName').textContent = `${patient.first_name} ${patient.last_name}`;
+            document.getElementById('piDept').textContent = patient.department;
+            document.getElementById('piId').textContent = patient.id;
+            document.getElementById('piGenderDob').textContent = `${patient.gender} | ${patient.dob}`;
+            document.getElementById('piDoctor').textContent = patient.doctor;
+
+            // Fetch their records
+            loadPatientRecords(patient.id);
+        }
+
+        // Fetch Timeline records
+        async function loadPatientRecords(patientId) {
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = '<div class="skeleton-cell" style="width:100%;height:100px;margin-bottom:1rem;"></div>';
+
+            try {
+                const records = await fetchMedicalRecords(patientId);
+                
+                if(!records || records.length === 0) {
+                    container.innerHTML = '<div class="empty-history">No medical history found for this patient.</div>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                records.forEach(r => {
+                    const el = document.createElement('div');
+                    el.className = 'timeline-item';
+                    
+                    let rxHtml = '';
+                    if(r.prescription && r.prescription.trim() !== '') {
+                        rxHtml = `
+                            <div class="prescription-box">
+                                <span>💊 Prescriptions:</span>
+                                ${r.prescription.replace(/\n/g, '<br>')}
+                            </div>
+                        `;
+                    }
+                    
+                    let notesHtml = r.notes ? `<p style="margin-top:1rem;"><strong>Notes:</strong> ${r.notes}</p>` : '';
+
+                    el.innerHTML = `
+                        <div class="ti-header">
+                            <div class="ti-date">${r.date}</div>
+                            <div class="ti-doctor">🩺 ${r.doctor_name}</div>
+                        </div>
+                        <div class="ti-content">
+                            <h4>Diagnosis: ${r.diagnosis}</h4>
+                            ${rxHtml}
+                            ${notesHtml}
+                        </div>
+                    `;
+                    container.appendChild(el);
+                });
+
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = '<div class="error-state">Error loading records. Check internet.</div>';
+            }
+        }
+
+        // Modal Logic
+        function openModal(id)  { document.getElementById(id).classList.add('open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+        
+        document.getElementById('addRecordBtn').addEventListener('click', () => {
+            if(!currentPatientId) return;
+            document.getElementById('rPatientId').value = currentPatientId;
+            openModal('addRecordModal');
+        });
+
+        // Form Submit Logic
+        document.getElementById('recordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            const payload = {
+                patient_id: document.getElementById('rPatientId').value,
+                date: document.getElementById('rDate').value,
+                doctor_name: document.getElementById('rDoctor').value,
+                diagnosis: document.getElementById('rDiagnosis').value,
+                prescription: document.getElementById('rPrescription').value,
+                notes: document.getElementById('rNotes').value
+            };
+
+            try {
+                await insertMedicalRecord(payload);
+                showToast("Record successfully added!", "success");
+                closeModal('addRecordModal');
+                e.target.reset();
+                document.getElementById('rDate').value = new Date().toISOString().split('T')[0];
+                
+                // Refresh Timeline
+                loadPatientRecords(currentPatientId);
+            } catch(err) {
+                showToast("Error: " + err.message, "error");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Save Record';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -7,6 +7,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* Action Dropdown */
+        .action-menu-wrapper { position: relative; display: inline-block; }
+        .action-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 110%;
+            background: var(--bg-dark);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            min-width: 160px;
+            z-index: 999;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+        .action-dropdown.open { display: block; }
+        .action-dropdown a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .action-dropdown a:hover { background: rgba(99,102,241,0.15); }
+        .action-dropdown a.danger { color: #ef4444; }
+        .action-dropdown a.danger:hover { background: rgba(239,68,68,0.1); }
+    </style>
 </head>
 <body class="dashboard-body">
     <div class="background-elements">
@@ -18,13 +47,13 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar glass-panel">
             <div class="logo sidebar-logo">
-                <span class="logo-icon">🫀</span> HMS <span>Pro</span>
+                <span class="logo-icon">🏥</span> HMS <span>Pro</span>
             </div>
             
             <nav class="sidebar-nav">
                 <div class="nav-group">
                     <p class="nav-label">Main Menu</p>
-                    <a href="#" class="nav-item active">
+                    <a href="dashboard.html" class="nav-item active">
                         <span class="icon">📊</span>
                         <span>Overview</span>
                     </a>
@@ -32,19 +61,23 @@
                         <span class="icon">📝</span>
                         <span>Register Patient</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="doctors.html" class="nav-item">
                         <span class="icon">🩺</span>
                         <span>Doctors</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="appointments.html" class="nav-item">
                         <span class="icon">📅</span>
                         <span>Appointments</span>
+                    </a>
+                    <a href="medical-history.html" class="nav-item">
+                        <span class="icon">📁</span>
+                        <span>Medical History</span>
                     </a>
                 </div>
                 
                 <div class="nav-group">
                     <p class="nav-label">Settings</p>
-                    <a href="#" class="nav-item">
+                    <a href="settings.html" class="nav-item">
                         <span class="icon">⚙️</span>
                         <span>System Settings</span>
                     </a>
@@ -59,15 +92,17 @@
         <!-- Main Content Area -->
         <main class="dashboard-content">
             <header class="dashboard-header glass-panel">
-                <div class="header-search">
+                <button id="hamburgerBtn">☰</button>
+                <div class="header-search hide-mobile">
                     <span class="search-icon">🔍</span>
                     <input type="text" placeholder="Search patients, doctors...">
                 </div>
                 <div class="header-profile">
+                    <button id="themeToggleBtn" style="background:none;border:none;font-size:1.5rem;cursor:pointer;">🌙</button>
                     <div class="notification-btn">🔔<span class="badge-dot"></span></div>
                     <div class="admin-profile">
                         <div class="avatar">AD</div>
-                        <span>Admin</span>
+                        <span class="hide-mobile">Admin</span>
                     </div>
                 </div>
             </header>
@@ -76,10 +111,18 @@
                 <div class="stat-card glass-panel orange">
                     <div class="stat-info">
                         <h3>Total Patients</h3>
-                        <h2>1,420</h2>
-                        <p><span class="trend up">↑ 12%</span> vs last month</p>
+                        <h2 id="statTotalPatients"><div class="skeleton-cell" style="width: 80px; height: 35px;"></div></h2>
+                        <p>Total registered</p>
                     </div>
                     <div class="stat-icon">👥</div>
+                </div>
+                <div class="stat-card glass-panel green">
+                    <div class="stat-info">
+                        <h3>Admitted Patients</h3>
+                        <h2 id="statAdmitted"><div class="skeleton-cell" style="width: 60px; height: 35px;"></div></h2>
+                        <p>Currently in hospital</p>
+                    </div>
+                    <div class="stat-icon">🛏️</div>
                 </div>
                 <div class="stat-card glass-panel blue">
                     <div class="stat-info">
@@ -89,21 +132,13 @@
                     </div>
                     <div class="stat-icon">👨‍⚕️</div>
                 </div>
-                <div class="stat-card glass-panel green">
-                    <div class="stat-info">
-                        <h3>Appointments TODAY</h3>
-                        <h2>156</h2>
-                        <p><span class="trend down">↓ 4%</span> vs yesterday</p>
-                    </div>
-                    <div class="stat-icon">📅</div>
-                </div>
                 <div class="stat-card glass-panel purple">
                     <div class="stat-info">
-                        <h3>Revenue Today</h3>
-                        <h2>$4,200</h2>
-                        <p><span class="trend up">↑ 8%</span> vs yesterday</p>
+                        <h3>Appointments TODAY</h3>
+                        <h2 id="statTodayApt"><div class="skeleton-cell" style="width: 60px; height: 35px;"></div></h2>
+                        <p>Upcoming today</p>
                     </div>
-                    <div class="stat-icon">💰</div>
+                    <div class="stat-icon">📅</div>
                 </div>
             </div>
             
@@ -111,41 +146,24 @@
                 <div class="recent-patients glass-panel">
                     <div class="panel-header">
                         <h3>Recent Patients Added</h3>
-                        <button class="btn-secondary small">View All</button>
+                        <button class="btn-secondary small" onclick="window.location.href='register.html'">View All Patients</button>
                     </div>
+                    
+                    <div id="tableErrorContainer"></div>
+                    
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Patient ID</th>
-                                    <th>Name</th>
+                                    <th>Patient Name</th>
+                                    <th>Department</th>
                                     <th>Assigned Doctor</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>#PT-001</td>
-                                    <td>John Doe</td>
-                                    <td>Dr. Sarah Smith</td>
-                                    <td><span class="status-badge admitted">Admitted</span></td>
-                                    <td><button class="action-btn">⋮</button></td>
-                                </tr>
-                                <tr>
-                                    <td>#PT-002</td>
-                                    <td>Jane Roe</td>
-                                    <td>Dr. Michael Chen</td>
-                                    <td><span class="status-badge waiting">Waiting</span></td>
-                                    <td><button class="action-btn">⋮</button></td>
-                                </tr>
-                                <tr>
-                                    <td>#PT-003</td>
-                                    <td>Alice Johnson</td>
-                                    <td>Dr. Emily Davis</td>
-                                    <td><span class="status-badge discharged">Discharged</span></td>
-                                    <td><button class="action-btn">⋮</button></td>
-                                </tr>
+                            <tbody id="recentPatientsTbody">
+                                <!-- Data will be loaded here dynamically -->
                             </tbody>
                         </table>
                     </div>
@@ -153,6 +171,89 @@
             </div>
         </main>
     </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app.js"></script>
+    <script>
+        // Init Dashboard Data
+        async function loadDashboardData() {
+            try {
+                showSkeletonRows('recentPatientsTbody', 5, 4);
+
+                // Load Stats
+                const stats = await fetchDashboardStats();
+                document.getElementById('statTotalPatients').textContent = stats.totalPatients;
+                document.getElementById('statTodayApt').textContent = stats.todayAppointments;
+                document.getElementById('statAdmitted').textContent = stats.admittedPatients;
+
+                // Load Patients Table
+                await loadTablePatients();
+
+            } catch (error) {
+                console.error("Dashboard Load Error:", error);
+                showError('tableErrorContainer', 'Supabase se data load hone mein masla aaya hai. '+error.message);
+                document.getElementById('recentPatientsTbody').innerHTML = '';
+            }
+        }
+
+        async function loadTablePatients() {
+            const patients = await fetchPatients(10);
+            const tbody = document.getElementById('recentPatientsTbody');
+            tbody.innerHTML = '';
+            
+            if (patients.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;">Koi patient nahi mila! Naya register karein.</td></tr>';
+                return;
+            }
+
+            patients.forEach(p => {
+                const tr = document.createElement('tr');
+                let statusCls = p.status === 'admitted' ? 'admitted' : (p.status === 'discharged' ? 'discharged' : 'waiting');
+                
+                tr.innerHTML = `
+                    <td>${p.first_name} ${p.last_name}</td>
+                    <td style="text-transform: capitalize">${p.department}</td>
+                    <td>${p.doctor}</td>
+                    <td><span class="status-badge ${statusCls}" style="text-transform: capitalize">${p.status}</span></td>
+                    <td>
+                        <div class="action-menu-wrapper">
+                            <button class="action-btn" onclick="toggleActionMenu(this)">⋮</button>
+                            <div class="action-dropdown">
+                                <a href="#">👁️ View Details</a>
+                                <a href="appointments.html">📅 Appointments</a>
+                                <a href="#" class="danger">🗑️ Delete</a>
+                            </div>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleActionMenu(btn) {
+            const dropdown = btn.nextElementSibling;
+            const isOpen = dropdown.classList.contains('open');
+            document.querySelectorAll('.action-dropdown.open').forEach(d => d.classList.remove('open'));
+            if (!isOpen) dropdown.classList.add('open');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('action-btn')) {
+                document.querySelectorAll('.action-dropdown.open').forEach(d => d.classList.remove('open'));
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDashboardData();
+            
+            // Set up real-time updates for patients table
+            subscribeRealtime('patients', (payload) => {
+                console.log("Realtime event received:", payload);
+                showToast("Real-time: Naya patient update hua hai!", "info");
+                // Reload dashboard data on change
+                loadDashboardData(); 
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMS - Appointments Scheduling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .appointments-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .calendar-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .calendar-controls button, .calendar-controls select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-controls button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .calendar-controls select option {
+            background: var(--bg-dark);
+            color: var(--text-main);
+        }
+
+        .date-display {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .schedule-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 200px;
+        }
+
+        .appointment-card {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            transition: transform 0.2s ease;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .appointment-card:hover {
+            transform: translateX(5px);
+            background: rgba(120, 120, 120, 0.1);
+        }
+
+        .apt-time {
+            min-width: 100px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            font-size: 1.1rem;
+            border-right: 1px solid var(--glass-border);
+            padding-right: 1rem;
+        }
+
+        .apt-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .apt-info h4 {
+            margin: 0 0 0.3rem 0;
+            font-size: 1.1rem;
+        }
+
+        .apt-info p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .apt-doctor {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 180px;
+        }
+
+        .apt-doctor img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--accent-secondary);
+        }
+
+        .apt-status {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .apt-status.confirmed { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .apt-status.pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .apt-status.cancelled { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+        /* Action Dropdown */
+        .action-menu-wrapper { position: relative; display: inline-block; margin-left: auto; }
+        .action-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 110%;
+            background: var(--bg-dark);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            min-width: 160px;
+            z-index: 999;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+        .action-dropdown.open { display: block; }
+        .action-dropdown a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .action-dropdown a:hover { background: rgba(99,102,241,0.15); }
+        .action-dropdown a.danger { color: #ef4444; }
+        .action-dropdown a.danger:hover { background: rgba(239,68,68,0.1); }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: var(--bg-dark);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            animation: fadeInModal 0.3s ease;
+        }
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-box h3 { margin-top: 0; font-size: 1.4rem; }
+        .modal-box p  { color: var(--text-muted); }
+        .modal-close {
+            position: absolute;
+            top: 1rem; right: 1.2rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+        .modal-form .form-row {
+            display: flex; flex-direction: column; gap: 0.4rem;
+            margin-bottom: 1.2rem;
+        }
+        .modal-form label { font-size: 0.88rem; color: var(--text-muted); }
+        .modal-form input, .modal-form select {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.95rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .modal-form input:focus, .modal-form select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+        .modal-form select option { background: var(--bg-dark); }
+        .modal-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
+    </style>
+</head>
+<body class="dashboard-body">
+    <div class="background-elements">
+        <div class="blob purple-blob" style="width: 400px; height: 400px; top: -10%; left: -5%;"></div>
+        <div class="blob blue-blob" style="width: 500px; height: 500px; bottom: -20%; right: -10%;"></div>
+    </div>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar glass-panel">
+            <div class="logo sidebar-logo">
+                <span class="logo-icon">🏥</span> HMS <span>Pro</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <p class="nav-label">Main Menu</p>
+                    <a href="dashboard.html" class="nav-item">
+                        <span class="icon">📊</span>
+                        <span>Overview</span>
+                    </a>
+                    <a href="register.html" class="nav-item">
+                        <span class="icon">📝</span>
+                        <span>Register Patient</span>
+                    </a>
+                    <a href="doctors.html" class="nav-item">
+                        <span class="icon">🩺</span>
+                        <span>Doctors</span>
+                    </a>
+                    <a href="appointments.html" class="nav-item active">
+                        <span class="icon">📅</span>
+                        <span>Appointments</span>
+                    </a>
+                    <a href="medical-history.html" class="nav-item">
+                        <span class="icon">📁</span>
+                        <span>Medical History</span>
+                    </a>
+                </div>
+                
+                <div class="nav-group">
+                    <p class="nav-label">Settings</p>
+                    <a href="settings.html" class="nav-item">
+                        <span class="icon">⚙️</span>
+                        <span>System Settings</span>
+                    </a>
+                    <a href="index.html" class="nav-item text-danger">
+                        <span class="icon">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-content">
+            <header class="dashboard-header glass-panel">
+                <button id="hamburgerBtn">☰</button>
+                <div class="header-search hide-mobile">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search patient name...">
+                </div>
+                <div class="header-profile">
+                    <button class="btn-primary small hide-mobile" id="newAptBtn" style="margin-right: 1rem;">+ New Appointment</button>
+                    <button id="themeToggleBtn" style="background:none;border:none;font-size:1.5rem;cursor:pointer;margin-right:1rem;">🌙</button>
+                    <div class="notification-btn">🔔<span class="badge-dot"></span></div>
+                    <div class="admin-profile">
+                        <div class="avatar">AD</div>
+                        <span class="hide-mobile">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="glass-panel" style="padding: 2rem;">
+                <div class="appointments-header">
+                    <div>
+                        <h2>Schedule</h2>
+                        <p style="color: var(--text-muted);">Manage upcoming patient appointments</p>
+                        <!-- Mobile generic button display -->
+                        <button class="btn-primary small" id="newAptBtnMobile" style="margin-top: 1rem; display: none;">+ New Appointment</button>
+                    </div>
+                    <div class="calendar-controls">
+                        <select id="deptFilter">
+                            <option value="">All Departments</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Neurology">Neurology</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="Orthopedics">Orthopedics</option>
+                        </select>
+                        <button id="prevDayBtn">&lt; Prev</button>
+                        <div class="date-display" id="dateDisplay">Loading...</div>
+                        <button id="nextDayBtn">Next &gt;</button>
+                    </div>
+                </div>
+
+                <div class="schedule-grid" id="scheduleGrid">
+                    <!-- Dynamic Data Goes Here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- New Appointment Modal -->
+    <div class="modal-overlay" id="newAptModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('newAptModal')">&#x2715;</button>
+            <h3>&#x1F4C5; New Appointment</h3>
+            <p>Schedule an appointment for a patient.</p>
+            <form class="modal-form" id="aptForm">
+                <div class="form-row">
+                    <label>Patient Name</label>
+                    <input type="text" id="mPatientName" placeholder="Ex. John Doe" required>
+                </div>
+                <div class="form-row">
+                    <label>Assign Doctor</label>
+                    <select id="mDoctor" required>
+                        <option value="" disabled selected>Select Doctor</option>
+                        <option value="Dr. Sarah Smith">Dr. Sarah Smith &mdash; Cardiology</option>
+                        <option value="Dr. Michael Chen">Dr. Michael Chen &mdash; Neurology</option>
+                        <option value="Dr. Emily Davis">Dr. Emily Davis &mdash; Pediatrics</option>
+                        <option value="Dr. James Wilson">Dr. James Wilson &mdash; Orthopedics</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label>Date</label>
+                    <input type="date" id="mDate" required>
+                </div>
+                <div class="form-row">
+                    <label>Time</label>
+                    <input type="time" id="mTime" required>
+                </div>
+                <div class="form-row">
+                    <label>Reason / Notes</label>
+                    <input type="text" id="mReason" placeholder="Ex. Routine checkup">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('newAptModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Book Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+    <script>
+        // --- Date Navigation ---
+        let currentDate = new Date();
+        
+        // Ensure local timezone ISO string mapping (YYYY-MM-DD)
+        function getLocalISODate(d) {
+            const offset = d.getTimezoneOffset();
+            const date = new Date(d.getTime() - (offset*60*1000));
+            return date.toISOString().split('T')[0];
+        }
+
+        function formatDate(d) {
+            const opts = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+            return d.toLocaleDateString('en-US', opts);
+        }
+
+        function updateDateDisplay() {
+            const today = new Date();
+            const isToday = currentDate.toDateString() === today.toDateString();
+            document.getElementById('dateDisplay').textContent = (isToday ? 'Today, ' : '') + formatDate(currentDate);
+            fetchAndRenderAppointments();
+        }
+
+        document.getElementById('prevDayBtn').addEventListener('click', () => {
+            currentDate.setDate(currentDate.getDate() - 1);
+            updateDateDisplay();
+        });
+        document.getElementById('nextDayBtn').addEventListener('click', () => {
+            currentDate.setDate(currentDate.getDate() + 1);
+            updateDateDisplay();
+        });
+
+        // Filter / Search Changes
+        document.getElementById('deptFilter').addEventListener('change', fetchAndRenderAppointments);
+        document.getElementById('searchInput').addEventListener('input', () => {
+            // Debounce simple
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(fetchAndRenderAppointments, 500);
+        });
+
+        // --- Fetch Real Data ---
+        async function fetchAndRenderAppointments() {
+            const grid = document.getElementById('scheduleGrid');
+            grid.innerHTML = '<div style="text-align:center;padding:2rem;"><div class="skeleton-cell" style="width:100%;height:60px;"></div></div>';
+            
+            try {
+                const dateStr = getLocalISODate(currentDate);
+                const deptStr = document.getElementById('deptFilter').value;
+                const searchStr = document.getElementById('searchInput').value;
+
+                const data = await fetchAppointments({
+                    date: dateStr,
+                    department: deptStr || undefined,
+                    search: searchStr || undefined
+                });
+
+                grid.innerHTML = '';
+
+                if (data.length === 0) {
+                    grid.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 3rem;">Koi appointments nahi hain is din.</p>';
+                    return;
+                }
+
+                data.forEach(apt => {
+                    const statusClass = apt.status === 'confirmed' ? 'confirmed' : (apt.status === 'cancelled' ? 'cancelled' : 'pending');
+                    
+                    const card = document.createElement('div');
+                    card.className = 'appointment-card';
+                    card.innerHTML = `
+                        <div class="apt-time">${apt.time}</div>
+                        <div class="apt-info">
+                            <h4>${apt.patient_name}</h4>
+                            <p>${apt.reason || apt.department + ' Consultation'}</p>
+                        </div>
+                        <div class="apt-doctor">
+                            <div class="avatar" style="width: 30px; height: 30px; font-size: 0.8rem;">🩺</div>
+                            <span>${apt.doctor}</span>
+                        </div>
+                        <div class="apt-status ${statusClass}">${apt.status}</div>
+                        <div class="action-menu-wrapper">
+                            <button class="action-btn" onclick="toggleActionMenu(this)">⋮</button>
+                            <div class="action-dropdown">
+                                <a href="#">✅ Confirm</a>
+                                <a href="#">✏️ Reschedule</a>
+                                <a href="#" class="danger">❌ Cancel</a>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error(error);
+                showError('scheduleGrid', 'Appointments load karne mein masla aaya! ' + error.message);
+            }
+        }
+
+
+        // --- Action Dropdown ---
+        function toggleActionMenu(btn) {
+            const dropdown = btn.nextElementSibling;
+            const isOpen = dropdown.classList.contains('open');
+            document.querySelectorAll('.action-dropdown.open').forEach(d => d.classList.remove('open'));
+            if (!isOpen) dropdown.classList.add('open');
+        }
+        document.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('action-btn')) {
+                document.querySelectorAll('.action-dropdown.open').forEach(d => d.classList.remove('open'));
+            }
+        });
+
+        // --- New Appointment Modal ---
+        function openModal(id)  { document.getElementById(id).classList.add('open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+        document.querySelectorAll('.modal-overlay').forEach(ov => ov.addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('open');
+        }));
+        
+        document.getElementById('newAptBtn').addEventListener('click', () => openModal('newAptModal'));
+        if(document.getElementById('newAptBtnMobile')) {
+             document.getElementById('newAptBtnMobile').addEventListener('click', () => openModal('newAptModal'));
+        }
+
+        // Fix mobile button visibility hack
+        if(window.innerWidth <= 768) {
+            document.getElementById('newAptBtnMobile').style.display = 'block';
+        }
+
+        document.getElementById('aptForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('[type="submit"]');
+            
+            const doctorVal = document.getElementById('mDoctor').value;
+            let deptVal = 'General';
+            if (doctorVal.includes('Smith')) deptVal = 'Cardiology';
+            else if (doctorVal.includes('Chen')) deptVal = 'Neurology';
+            else if (doctorVal.includes('Davis')) deptVal = 'Pediatrics';
+            else if (doctorVal.includes('Wilson')) deptVal = 'Orthopedics';
+
+            const payload = {
+                patient_name: document.getElementById('mPatientName').value,
+                doctor: doctorVal,
+                department: deptVal,
+                date: document.getElementById('mDate').value,
+                time: document.getElementById('mTime').value,
+                reason: document.getElementById('mReason').value,
+                status: 'pending'
+            };
+
+            btn.textContent = 'Booking...';
+            btn.disabled = true;
+
+            try {
+                await insertAppointment(payload);
+                closeModal('newAptModal');
+                showToast('&#x2705; Appointment booked successfully!');
+                e.target.reset();
+                fetchAndRenderAppointments();
+            } catch (error) {
+                console.error(error);
+                showToast('❌ Booking failed: ' + error.message, 'error');
+            } finally {
+                btn.textContent = 'Book Appointment';
+                btn.disabled = false;
+            }
+        });
+
+        // Init App on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDateDisplay();
+            
+            // Subscribing to realtime updates
+            subscribeRealtime('appointments', (payload) => {
+                showToast('Real-time: Appointments update!', 'info');
+                fetchAndRenderAppointments();
+            });
+        });
+    </script>
+</body>
+</html>
