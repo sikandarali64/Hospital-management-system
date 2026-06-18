@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - HMS Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .patient-header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .patient-header h1 { font-size: 1.8rem; }
+        .patient-header p { color: var(--text-muted); margin-top: 0.25rem; }
+        .header-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        .btn-outline {
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.05);
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-outline:hover { background: rgba(99,102,241,0.15); border-color: var(--accent-primary); }
+        .dashboard-grid {
+            max-width: 1100px;
+            margin: 0 auto 4rem auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .dash-card {
+            background: rgba(20, 22, 33, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.75rem;
+        }
+        .dash-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .dash-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; }
+        .dash-card .icon { font-size: 2rem; margin-bottom: 0.75rem; }
+        .stat-value { font-size: 2rem; font-weight: 800; color: var(--accent-primary); }
+        .stat-label { color: var(--text-muted); font-size: 0.85rem; }
+        .video-card {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2.5rem;
+        }
+        .video-card .btn-primary { margin-top: 0.5rem; font-size: 1.05rem; padding: 1rem 2rem; }
+        .appointment-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .appointment-item:last-child { border-bottom: none; }
+        .appointment-item span { color: var(--text-muted); font-size: 0.85rem; }
+        .status-pill {
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(16,185,129,0.15);
+            color: #10b981;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob purple-blob"></div>
+        <div class="blob blue-blob"></div>
+    </div>
+
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <span><span style="color:#ef4444;">🚨</span> Emergency: 111-911-911</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="patient-login.html">Patient Portal Login</a>
+                <a href="dashboard.html" class="staff-login">Staff/Admin Login</a>
+            </div>
+        </div>
+    </div>
+
+    <nav class="glass-nav">
+        <div class="logo"><span class="logo-icon">🏥</span> HMS <span>Pro</span></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="request-appointment.html">Book Appointment</a>
+            <a href="clinical-labs.html">Clinical Labs</a>
+        </div>
+        <button class="btn-primary" onclick="window.location.href='tele-consult.html'">Join Video Call</button>
+    </nav>
+
+    <div class="patient-header">
+        <div>
+            <h1>Welcome, Patient</h1>
+            <p>Your health dashboard — appointments, records, and tele-consultation.</p>
+        </div>
+        <div class="header-actions">
+            <a href="index.html" class="btn-outline">🏠 Home</a>
+            <a href="patient-login.html" class="btn-outline">🚪 Logout</a>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="dash-card">
+            <div class="icon">📅</div>
+            <h3>Upcoming Appointment</h3>
+            <div class="appointment-item">
+                <div>
+                    <strong>Dr. Sarah Smith</strong><br>
+                    <span>Cardiology · Tomorrow, 10:00 AM</span>
+                </div>
+                <span class="status-pill">Confirmed</span>
+            </div>
+        </div>
+
+        <div class="dash-card">
+            <div class="icon">🧪</div>
+            <h3>Lab Results</h3>
+            <p>Your latest blood work results are ready to view.</p>
+            <div class="stat-value">2</div>
+            <div class="stat-label">New reports available</div>
+        </div>
+
+        <div class="dash-card">
+            <div class="icon">💊</div>
+            <h3>Prescriptions</h3>
+            <p>Active medications and refill reminders.</p>
+            <div class="stat-value">3</div>
+            <div class="stat-label">Active prescriptions</div>
+        </div>
+
+        <div class="dash-card video-card">
+            <div class="icon">📹</div>
+            <h3>Tele-Consultation</h3>
+            <p>Connect with your doctor via secure video call. Available during your scheduled appointment time.</p>
+            <button class="btn-primary large" onclick="window.location.href='tele-consult.html'">Join Video Call</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</body>
+</html>

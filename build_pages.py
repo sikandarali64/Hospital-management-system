@@ -238,6 +238,59 @@ pages = {
         </div>
         '''
     },
+    'patient-login.html': {
+        'title': 'Patient Portal Login',
+        'heading': 'Patient Portal Login',
+        'subheading': 'Access your medical records, appointments, and test results securely.',
+        'custom_css': '''
+        .content-container { max-width: 500px; margin: 0 auto 4rem auto; padding: 0 5%; }
+        .card { background: rgba(20, 22, 33, 0.6); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 2.5rem; text-align: center; }
+        .card h2 { font-size: 1.5rem; margin-bottom: 1.5rem; color: #efeff1; }
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted); }
+        .form-control { width: 100%; padding: 0.8rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; font-family: 'Outfit'; }
+        .form-control:focus { outline: none; border-color: var(--accent-primary, #6366f1); box-shadow: 0 0 10px rgba(99, 102, 241, 0.2); }
+        .btn-submit { background: linear-gradient(135deg, var(--accent-primary, #6366f1), var(--accent-secondary, #0ea5e9)); color: #fff; padding: 0.9rem 2rem; border-radius: 12px; border: none; font-size: 1rem; cursor: pointer; transition: 0.3s; font-weight: 600; width: 100%; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); margin-top: 1rem; }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5); }
+        .forgot-link { display: block; margin-top: 1.5rem; color: var(--accent-secondary, #0ea5e9); font-size: 0.9rem; text-decoration: none; }
+        .forgot-link:hover { text-decoration: underline; }
+        ''',
+        'custom_js': '''
+        <script>
+            function loginPatient(e) {
+                e.preventDefault();
+                const btn = e.target.querySelector('button');
+                btn.innerHTML = 'Logging in...';
+                
+                setTimeout(() => {
+                    showToast('Login successful. Redirecting to dashboard...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'patient-dashboard.html';
+                    }, 1000);
+                }, 1000);
+            }
+        </script>
+        ''',
+        'content': '''
+        <div class="content-container">
+            <div class="card">
+                <h2>Welcome Back</h2>
+                <form onsubmit="loginPatient(event)">
+                    <div class="form-group">
+                        <label>Email Address or MRN</label>
+                        <input type="text" class="form-control" required placeholder="Enter your email or MRN">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn-submit">Login</button>
+                    <a href="#" class="forgot-link">Forgot your password?</a>
+                </form>
+            </div>
+        </div>
+        '''
+    },
     'diseases-conditions.html': {
         'title': 'Diseases & Conditions',
         'heading': 'Health Library: Diseases & Conditions',
@@ -364,7 +417,7 @@ base_template = """<!DOCTYPE html>
                 <span class="hide-mobile">📍 Find a Location</span>
             </div>
             <div class="top-bar-right">
-                <a href="#">Patient Portal Login</a>
+                <a href="patient-login.html">Patient Portal Login</a>
                 <a href="dashboard.html" class="staff-login">Staff/Admin Login</a>
             </div>
         </div>
@@ -447,7 +500,8 @@ replacements = {
     '<a href=\"#\">International Patients</a>': '<a href=\"international-services.html\">International Patients</a>',
     '<a href=\"#\">Billing & Insurance</a>': '<a href=\"billing-insurance.html\">Billing & Insurance</a>',
     '<a href=\"#\">Patient & Visitor Guide</a>': '<a href=\"patient-visitor-guide.html\">Patient & Visitor Guide</a>',
-    '<a href=\"#\">Diseases & Conditions</a>': '<a href=\"diseases-conditions.html\">Diseases & Conditions</a>'
+    '<a href=\"#\">Diseases & Conditions</a>': '<a href=\"diseases-conditions.html\">Diseases & Conditions</a>',
+    '<a href=\"#\">Patient Portal Login</a>': '<a href=\"patient-login.html\">Patient Portal Login</a>'
 }
 
 html_files = [f for f in os.listdir(dir_path) if f.endswith('.html')]
