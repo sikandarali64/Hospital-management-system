@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tele-Consultation - HMS Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .consult-container {
+            max-width: 900px;
+            margin: 2rem auto 4rem auto;
+            padding: 0 5%;
+        }
+        .video-area {
+            background: rgba(20, 22, 33, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .video-main {
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(14,165,233,0.15));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .video-main .doctor-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            border: 3px solid var(--accent-primary);
+        }
+        .video-main h2 { font-size: 1.3rem; margin-bottom: 0.25rem; }
+        .video-main p { color: var(--text-muted); font-size: 0.9rem; }
+        .call-status {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(16,185,129,0.2);
+            color: #10b981;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .call-timer {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .self-view {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            width: 140px;
+            height: 100px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .ctrl-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.05);
+            color: var(--text-main);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .ctrl-btn:hover { background: rgba(99,102,241,0.2); }
+        .ctrl-btn.end-call {
+            width: auto;
+            border-radius: 100px;
+            padding: 0 2rem;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .ctrl-btn.end-call:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(239,68,68,0.4); }
+        .consult-info {
+            background: rgba(20, 22, 33, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        .consult-info h3 { margin-bottom: 0.5rem; }
+        .consult-info p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob purple-blob"></div>
+        <div class="blob blue-blob"></div>
+    </div>
+
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <span><span style="color:#ef4444;">🚨</span> Emergency: 111-911-911</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="patient-login.html">Patient Portal Login</a>
+                <a href="dashboard.html" class="staff-login">Staff/Admin Login</a>
+            </div>
+        </div>
+    </div>
+
+    <nav class="glass-nav">
+        <div class="logo"><span class="logo-icon">🏥</span> HMS <span>Pro</span></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="patient-dashboard.html">My Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="consult-container">
+        <div class="video-area">
+            <div class="video-main">
+                <span class="call-status">● Connected</span>
+                <span class="call-timer" id="callTimer">00:00</span>
+                <div class="doctor-avatar">👨‍⚕️</div>
+                <h2>Dr. Sarah Smith</h2>
+                <p>Cardiology · Tele-Consultation</p>
+                <div class="self-view">🧑</div>
+            </div>
+            <div class="controls">
+                <button class="ctrl-btn" title="Mute" onclick="toggleMute(this)">🎤</button>
+                <button class="ctrl-btn" title="Camera" onclick="toggleCamera(this)">📷</button>
+                <button class="ctrl-btn end-call" onclick="endCall()">End Call</button>
+            </div>
+        </div>
+
+        <div class="consult-info">
+            <h3>Consultation Notes</h3>
+            <p>Your secure video consultation is in progress. Please ensure you are in a quiet, well-lit environment. If you experience connection issues, try refreshing the page or contact our support line at 111-911-911.</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+    <script>
+        let seconds = 0;
+        const timerEl = document.getElementById('callTimer');
+        const timerInterval = setInterval(() => {
+            seconds++;
+            const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const s = String(seconds % 60).padStart(2, '0');
+            timerEl.textContent = m + ':' + s;
+        }, 1000);
+
+        function toggleMute(btn) {
+            btn.style.opacity = btn.style.opacity === '0.5' ? '1' : '0.5';
+        }
+
+        function toggleCamera(btn) {
+            btn.style.opacity = btn.style.opacity === '0.5' ? '1' : '0.5';
+        }
+
+        function endCall() {
+            clearInterval(timerInterval);
+            showToast('Call ended. Returning to dashboard...', 'info');
+            setTimeout(() => {
+                window.location.href = 'patient-dashboard.html';
+            }, 800);
+        }
+    </script>
+</body>
+</html>
