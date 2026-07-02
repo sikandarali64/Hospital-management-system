@@ -234,6 +234,17 @@ function subscribeRealtime(table, callback) {
 }
 
 // =============================================
+// MOBILE MENU HELPERS
+// =============================================
+function closeAllMobileMenuOverlays(breakpoint) {
+    if (window.innerWidth <= breakpoint) return;
+
+    document.querySelectorAll('.mobile-menu-overlay.active').forEach(overlay => {
+        overlay.classList.remove('active');
+    });
+}
+
+// =============================================
 // APP INIT
 // =============================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -242,6 +253,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Theme toggle button click
     const themeBtn = document.getElementById('themeToggleBtn');
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+
+    // Dynamic sidebar hamburger toggle injection for dashboards
+    const dashHeader = document.querySelector('.dashboard-header');
+    if (dashHeader && !document.getElementById('hamburgerBtn')) {
+        const hamburgerBtn = document.createElement('button');
+        hamburgerBtn.id = 'hamburgerBtn';
+        hamburgerBtn.innerHTML = '☰';
+        hamburgerBtn.setAttribute('aria-label', 'Toggle Sidebar Menu');
+        dashHeader.insertBefore(hamburgerBtn, dashHeader.firstChild);
+    }
 
     // Mobile sidebar toggle
     const hamburger = document.getElementById('hamburgerBtn');
@@ -257,6 +278,108 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Dynamic mobile navigation menu for secondary pages (.glass-nav)
+    const glassNav = document.querySelector('.glass-nav');
+    if (glassNav) {
+        // Create hamburger button if it doesn't exist
+        if (!glassNav.querySelector('.glass-hamburger')) {
+            const hamburgerBtn = document.createElement('button');
+            hamburgerBtn.className = 'glass-hamburger';
+            hamburgerBtn.innerHTML = '☰';
+            hamburgerBtn.setAttribute('aria-label', 'Toggle Navigation Menu');
+            
+            // Insert before the last button if possible, or append
+            const actionBtn = glassNav.querySelector('.btn-primary');
+            if (actionBtn) {
+                glassNav.insertBefore(hamburgerBtn, actionBtn);
+            } else {
+                glassNav.appendChild(hamburgerBtn);
+            }
+
+            // Create mobile overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'mobile-menu-overlay';
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'close-btn';
+            closeBtn.innerHTML = '&times;';
+            overlay.appendChild(closeBtn);
+
+            const menuLinksContainer = document.createElement('div');
+            menuLinksContainer.className = 'mobile-menu-links';
+
+            // Extract links from .nav-links
+            const originalNavLinks = glassNav.querySelector('.nav-links');
+            if (originalNavLinks) {
+                // We'll iterate through children
+                Array.from(originalNavLinks.children).forEach(child => {
+                    if (child.tagName === 'A') {
+                        const linkCopy = child.cloneNode(true);
+                        menuLinksContainer.appendChild(linkCopy);
+                    } else if (child.classList.contains('dropdown')) {
+                        const dropBtn = child.querySelector('.dropbtn');
+                        const subLinks = child.querySelectorAll('.dropdown-content a');
+                        if (!dropBtn || subLinks.length === 0) return;
+
+                        const title = document.createElement('div');
+                        title.className = 'mobile-menu-group-title';
+                        title.textContent = dropBtn.textContent.replace(/[▾▾]/g, '').trim();
+                        menuLinksContainer.appendChild(title);
+
+                        const subContainer = document.createElement('div');
+                        subContainer.className = 'mobile-submenu';
+                        subLinks.forEach(sub => {
+                            subContainer.appendChild(sub.cloneNode(true));
+                        });
+                        menuLinksContainer.appendChild(subContainer);
+                    }
+                });
+
+                // Add Portal/Staff Login links for mobile viewports
+                const accountTitle = document.createElement('div');
+                accountTitle.className = 'mobile-menu-group-title';
+                accountTitle.textContent = 'Account';
+                menuLinksContainer.appendChild(accountTitle);
+
+                const accountSub = document.createElement('div');
+                accountSub.className = 'mobile-submenu';
+
+                const patLogin = document.createElement('a');
+                patLogin.href = 'patient-login.html';
+                patLogin.textContent = 'Patient Portal Login';
+                accountSub.appendChild(patLogin);
+
+                const staffLogin = document.createElement('a');
+                staffLogin.href = 'dashboard.html';
+                staffLogin.textContent = 'Staff / Admin Login';
+                accountSub.appendChild(staffLogin);
+
+                menuLinksContainer.appendChild(accountSub);
+            }
+
+            overlay.appendChild(menuLinksContainer);
+            document.body.appendChild(overlay);
+
+            // Toggle events
+            hamburgerBtn.addEventListener('click', () => {
+                overlay.classList.add('active');
+            });
+
+            closeBtn.addEventListener('click', () => {
+                overlay.classList.remove('active');
+            });
+
+            // Close overlay on link click
+            overlay.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    overlay.classList.remove('active');
+                }
+            });
+        }
+    }
+
+    window.addEventListener('resize', () => closeAllMobileMenuOverlays(992));
 
     console.log('HMS Pro - Initialized ✅');
 });

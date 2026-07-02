@@ -10,6 +10,7 @@
         .page-header { padding: 4rem 5% 2rem 5%; text-align: center; }
         .page-header h1 { font-size: 2.5rem; margin-bottom: 1rem; }
         .page-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6; font-size: 1.1rem; }
+        
         .content-container { max-width: 500px; margin: 0 auto 4rem auto; padding: 0 5%; }
         .card { background: rgba(20, 22, 33, 0.6); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 2.5rem; text-align: center; }
         .card h2 { font-size: 1.5rem; margin-bottom: 1.5rem; color: #efeff1; }
@@ -21,6 +22,7 @@
         .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5); }
         .forgot-link { display: block; margin-top: 1.5rem; color: var(--accent-secondary, #0ea5e9); font-size: 0.9rem; text-decoration: none; }
         .forgot-link:hover { text-decoration: underline; }
+        
     </style>
 </head>
 <body>
@@ -93,39 +95,43 @@
         <p>Access your medical records, appointments, and test results securely.</p>
     </div>
 
-    <div class="content-container">
-        <div class="card">
-            <h2>Welcome Back</h2>
-            <form onsubmit="loginPatient(event)">
-                <div class="form-group">
-                    <label>Email Address or MRN</label>
-                    <input type="text" class="form-control" required placeholder="Enter your email or MRN">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" required placeholder="Enter your password">
-                </div>
-                <button type="submit" class="btn-submit">Login</button>
-                <a href="#" class="forgot-link">Forgot your password?</a>
-            </form>
+    
+        <div class="content-container">
+            <div class="card">
+                <h2>Welcome Back</h2>
+                <form onsubmit="loginPatient(event)">
+                    <div class="form-group">
+                        <label>Email Address or MRN</label>
+                        <input type="text" class="form-control" required placeholder="Enter your email or MRN">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn-submit">Login</button>
+                    <a href="#" class="forgot-link">Forgot your password?</a>
+                </form>
+            </div>
         </div>
-    </div>
+        
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app.js"></script>
-    <script>
-        function loginPatient(e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            btn.innerHTML = 'Logging in...';
-
-            setTimeout(() => {
-                showToast('Login successful. Redirecting to dashboard...', 'success');
+    
+        <script>
+            function loginPatient(e) {
+                e.preventDefault();
+                const btn = e.target.querySelector('button');
+                btn.innerHTML = 'Logging in...';
+                
                 setTimeout(() => {
-                    window.location.href = 'patient-dashboard.html';
+                    showToast('Login successful. Redirecting to dashboard...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'patient-dashboard.html';
+                    }, 1000);
                 }, 1000);
-            }, 1000);
-        }
-    </script>
+            }
+        </script>
+        
 </body>
 </html>
