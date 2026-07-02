@@ -1659,6 +1659,11 @@
                 mobileMenuOverlay.classList.remove('active');
             }
         });
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                mobileMenuOverlay.classList.remove('active');
+            }
+        });
     }
 </script>
 </body>
