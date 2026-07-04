@@ -147,7 +147,56 @@
             justify-content: flex-end;
             gap: 1rem;
         }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .settings-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .settings-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                background: var(--glass-bg);
+                border: 1px solid var(--glass-border);
+                border-radius: 12px;
+                padding: 0.75rem;
+            }
+
+            .settings-nav-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+                border-radius: 8px;
+            }
+
+            .settings-content {
+                padding: 1.25rem;
+            }
+
+            .toggle-switch {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .save-bar {
+                flex-direction: column;
+            }
+
+            .save-bar button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .settings-nav-item {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.8rem;
+            }
+        }
     </style>
+
 </head>
 <body class="dashboard-body">
     <div class="background-elements">

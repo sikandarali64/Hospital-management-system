@@ -146,7 +146,40 @@
         }
         .modal-form select option { background: #1a1733; }
         .modal-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .doctors-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .modal-box {
+                padding: 1.5rem;
+                margin: 1rem;
+                max-width: calc(100% - 2rem);
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .modal-actions button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .doctors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .doctor-card {
+                padding: 1rem;
+            }
+        }
     </style>
+
 </head>
 <body class="dashboard-body">
     <div class="background-elements">
